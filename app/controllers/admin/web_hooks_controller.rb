@@ -138,7 +138,7 @@ class Admin::WebHooksController < Admin::AdminController
   def bulk_redeliver_events
     limit = 50
     offset = params[:offset].to_i
-    failed_events = @web_hook.web_hook_events.failed.limit(limit).offset(offset)
+    failed_events = @web_hook&.web_hook_events&.failed&.limit(limit)&.offset(offset)
     render_serialized(failed_events, AdminWebHookEventSerializer, root: "web_hook_event")
   end
 

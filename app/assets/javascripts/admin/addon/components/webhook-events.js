@@ -129,6 +129,11 @@ export default class WebhookEvents extends Component {
     this.eventIds = this.events.content.map((event) => event.id);
 
     this.count = this.events.length;
+    if (this.count === 0) {
+      this.dialog.alert("No events to redeliver.");
+      return;
+    }
+
     return this.dialog.yesNoConfirm({
       message: I18n.t("admin.web_hooks.events.bulk_redeliver_confirm", {
         count: this.count,
@@ -139,7 +144,11 @@ export default class WebhookEvents extends Component {
             `/admin/api/web_hooks/${this.args.webhookId}/events/bulk_redeliver`,
             { type: "POST", data: { event_ids: this.eventIds } }
           );
-          this.args.event.setProperties(json.web_hook_event);
+          if (json.web_hook_event && json.web_hook_event.length > 0) {
+            this.args.event.setProperties(json.web_hook_event);
+          } else {
+            this.dialog.alert("No events to redeliver.");
+          }
         } catch (e) {
           popupAjaxError(e);
         }
