@@ -1,6 +1,13 @@
 import "./deprecation-workflow";
 import "decorator-transforms/globals";
+import "./loader";
 import "./loader-shims";
+import "./more-loader-shims";
+// import compatModules from "@embroider/virtual/compat-modules";
+// for (const [path, module] of Object.entries(compatModules)) {
+//   window.define(path, [], () => module);
+// }
+
 import "./global-compat";
 import { registerDiscourseImplicitInjections } from "discourse/lib/implicit-injections";
 
@@ -9,7 +16,7 @@ registerDiscourseImplicitInjections();
 
 import Application from "@ember/application";
 import { VERSION } from "@ember/version";
-import require from "require";
+// import require from "require";
 import { normalizeEmberEventHandling } from "discourse/lib/ember-events";
 import { withPluginApi } from "discourse/lib/plugin-api";
 import { isTesting } from "discourse-common/config/environment";
@@ -100,6 +107,7 @@ function loadInitializers(app) {
   let discourseInstanceInitializers = [];
 
   for (let moduleName of Object.keys(requirejs.entries)) {
+    console.log(moduleName);
     if (moduleName.startsWith("discourse/") && !moduleName.endsWith("-test")) {
       // In discourse core, initializers follow standard Ember conventions
       if (moduleName.startsWith("discourse/initializers/")) {
@@ -242,6 +250,9 @@ function printDebugInfo() {
 }
 
 export default Discourse;
+import environment from "./config/environment";
+const app = Discourse.create({ ...environment.APP });
+app.start();
 
 /**
  * @typedef {import('ember-source/types')} EmberTypes

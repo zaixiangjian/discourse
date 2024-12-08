@@ -4,9 +4,6 @@
   "description": "Shared code between discourse apps",
   "author": "Discourse",
   "license": "GPL-2.0-only",
-  "keywords": [
-    "ember-addon"
-  ],
   "scripts": {
     "build": "ember build",
     "lint:hbs": "ember-template-lint .",
@@ -14,15 +11,16 @@
     "start": "ember serve"
   },
   "dependencies": {
+    "virtual-dom": "^2.1.1",
     "@babel/core": "^7.26.0",
     "@ember/string": "^4.0.0",
-    "discourse-i18n": "workspace:1.0.0",
+    "discourse-i18n": "workspace:*",
     "ember-auto-import": "^2.10.0",
     "ember-cli-babel": "^8.2.0",
     "ember-cli-htmlbars": "^6.3.0",
     "ember-resolver": "^13.1.0",
     "handlebars": "^4.7.8",
-    "truth-helpers": "workspace:1.0.0"
+    "truth-helpers": "workspace:*"
   },
   "devDependencies": {
     "@ember/optional-features": "^2.2.0",
@@ -41,15 +39,14 @@
     "ember-source": "~5.12.0",
     "ember-source-channel-url": "^3.0.0",
     "loader.js": "^4.7.0",
-    "webpack": "^5.97.1"
+    "webpack": "^5.97.1",
+    "@ember-decorators/component": "^6.1.1",
+    "@ember-decorators/object": "^6.1.1"
   },
   "engines": {
     "node": ">= 18",
     "npm": "please-use-pnpm",
     "yarn": "please-use-pnpm",
     "pnpm": ">= 9"
-  },
-  "ember": {
-    "edition": "default"
   }
 }

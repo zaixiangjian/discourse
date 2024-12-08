@@ -4,9 +4,6 @@
   "description": "Discourse's text rendering utilities",
   "author": "Discourse",
   "license": "GPL-2.0-only",
-  "keywords": [
-    "ember-addon"
-  ],
   "scripts": {
     "build": "ember build",
     "lint:hbs": "ember-template-lint .",
@@ -15,8 +12,8 @@
   },
   "dependencies": {
     "@babel/core": "^7.26.0",
-    "discourse-common": "workspace:1.0.0",
-    "discourse-i18n": "workspace:1.0.0",
+    "discourse-common": "workspace:*",
+    "discourse-i18n": "workspace:*",
     "ember-auto-import": "^2.10.0",
     "ember-cli-babel": "^8.2.0",
     "ember-cli-htmlbars": "^6.3.0",
@@ -47,8 +44,5 @@
     "npm": "please-use-pnpm",
     "yarn": "please-use-pnpm",
     "pnpm": ">= 9"
-  },
-  "ember": {
-    "edition": "default"
   }
 }
