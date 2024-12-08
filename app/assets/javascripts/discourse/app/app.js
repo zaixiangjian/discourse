@@ -1,3 +1,7 @@
+performance.mark("discourse-init");
+const event = new CustomEvent("discourse-init");
+document.dispatchEvent(event);
+
 import "./deprecation-workflow";
 import "decorator-transforms/globals";
 import "./loader";

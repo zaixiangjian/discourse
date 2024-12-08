@@ -12,7 +12,8 @@ module SplashScreenHelper
   private
 
   def self.load_js
-    File.read("#{Rails.root}/app/assets/javascripts/discourse/dist/assets/splash-screen.js").sub(
+    # TODO - this is no longer babel-ified, we should fix that
+    File.read("#{Rails.root}/app/assets/javascripts/discourse/scripts/splash-screen.js").sub(
       "//# sourceMappingURL=splash-screen.map",
       "",
     )

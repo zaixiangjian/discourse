@@ -3,6 +3,7 @@ import compatModules from "@embroider/virtual/compat-modules";
 const seenNames = new Set();
 
 const moduleSets = [
+  compatModules,
   import.meta.glob("./**/*.{gjs,js}", { eager: true }),
   import.meta.glob("./**/*.hbs", { eager: true }),
   import.meta.glob("../../discourse-common/addon/**/*.{gjs,js}", {
@@ -29,7 +30,6 @@ const moduleSets = [
   import.meta.glob("../../dialog-holder/addon/**/*.hbs", {
     eager: true,
   }),
-  compatModules,
 ]
   .map((m) => Object.entries(m))
   .flat();
