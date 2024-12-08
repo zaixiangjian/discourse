@@ -134,6 +134,8 @@ function lookupModuleBySuffix(suffix) {
       "discourse/", // Includes themes/plugins
       "discourse-common/",
       "select-kit/",
+      "float-kit/",
+      "dialog-holder/",
       "admin/",
     ];
     Object.keys(requirejs.entries).forEach((name) => {

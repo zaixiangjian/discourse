@@ -3,6 +3,8 @@ import "decorator-transforms/globals";
 import "./loader";
 import "./loader-shims";
 import "./more-loader-shims";
+
+window.initLocale();
 // import compatModules from "@embroider/virtual/compat-modules";
 // for (const [path, module] of Object.entries(compatModules)) {
 //   window.define(path, [], () => module);
@@ -107,7 +109,6 @@ function loadInitializers(app) {
   let discourseInstanceInitializers = [];
 
   for (let moduleName of Object.keys(requirejs.entries)) {
-    console.log(moduleName);
     if (moduleName.startsWith("discourse/") && !moduleName.endsWith("-test")) {
       // In discourse core, initializers follow standard Ember conventions
       if (moduleName.startsWith("discourse/initializers/")) {

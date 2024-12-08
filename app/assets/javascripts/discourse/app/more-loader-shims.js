@@ -2,21 +2,46 @@ import compatModules from "@embroider/virtual/compat-modules";
 
 const seenNames = new Set();
 
-for (const [path, module] of Object.entries(
-  import.meta.glob("./**/*.{gjs,js}", { eager: true })
-)) {
-  const name = path.replace("./", "discourse/").replace(/\.g?js/, "");
-  seenNames.add(name);
-  window.define(name, [], () => module);
-}
+const moduleSets = [
+  import.meta.glob("./**/*.{gjs,js}", { eager: true }),
+  import.meta.glob("./**/*.hbs", { eager: true }),
+  import.meta.glob("../../discourse-common/addon/**/*.{gjs,js}", {
+    eager: true,
+  }),
+  import.meta.glob("../../discourse-common/addon/**/*.hbs", {
+    eager: true,
+  }),
+  import.meta.glob("../../float-kit/addon/**/*.{gjs,js}", {
+    eager: true,
+  }),
+  import.meta.glob("../../float-kit/addon/**/*.hbs", {
+    eager: true,
+  }),
+  import.meta.glob("../../select-kit/addon/**/*.{gjs,js}", {
+    eager: true,
+  }),
+  import.meta.glob("../../select-kit/addon/**/*.hbs", {
+    eager: true,
+  }),
+  import.meta.glob("../../dialog-holder/addon/**/*.{gjs,js}", {
+    eager: true,
+  }),
+  import.meta.glob("../../dialog-holder/addon/**/*.hbs", {
+    eager: true,
+  }),
+  compatModules,
+]
+  .map((m) => Object.entries(m))
+  .flat();
 
-for (const [path, module] of Object.entries(
-  import.meta.glob("./**/*.hbs", { eager: true })
-)) {
-  const name = path.replace("./", "discourse/").replace(/\.hbs/, "");
-  if (seenNames.has(name)) {
-    continue;
+for (const [path, module] of moduleSets) {
+  let name = path
+    .replace("../../", "")
+    .replace("./", "discourse/")
+    .replace("/addon/", "/")
+    .replace(/\.\w+$/, "");
+  if (!seenNames.has(name)) {
+    seenNames.add(name);
+    window.define(name, [], () => module);
   }
-  seenNames.add(name);
-  window.define(name, [], () => module);
 }

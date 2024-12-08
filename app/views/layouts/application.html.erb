@@ -30,6 +30,7 @@
 
     <%= preload_script 'browser-detect' %>
 
+    
     <%= preload_script "vendor" %>
     <%= preload_script "discourse" %>
     <%- Discourse.find_plugin_js_assets(include_official: allow_plugins?, include_unofficial: allow_third_party_plugins?, request: request).each do |file| %>
@@ -144,6 +145,12 @@
     <%- if allow_plugins? %>
       <%= build_plugin_html 'server:before-body-close' %>
     <%- end %>
+
+    <!-- if development -->
+    <script type="module" src="http://localhost:4200/@vite/client"></script>
+    <script type="module" src="http://localhost:4200/main.js"></script>
+    <script src="/@embroider/virtual/vendor.js"></script>
+    <script type="module" src="/app/app.js"></script>
 
     <script nonce="<%= csp_nonce_placeholder %>">/* Workaround for https://bugs.webkit.org/show_bug.cgi?id=209261 */</script>
   </body>

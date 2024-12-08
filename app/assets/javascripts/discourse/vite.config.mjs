@@ -10,6 +10,7 @@ import {
   contentFor,
 } from "@embroider/vite";
 import { babel } from "@rollup/plugin-babel";
+import viteProxy from "./vite-proxy";
 
 const extensions = [
   ".mjs",
@@ -46,6 +47,7 @@ export default defineConfig(({ mode }) => {
       compatPrebuild(),
       assets(),
       contentFor(),
+      viteProxy(),
 
       babel({
         babelHelpers: "runtime",
