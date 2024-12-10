@@ -1,15 +1,17 @@
-import { defineConfig } from "vite";
 import {
-  resolver,
+  assets,
+  compatPrebuild,
+  contentFor,
   hbs,
+  optimizeDeps,
+  resolver,
   scripts,
   templateTag,
-  optimizeDeps,
-  compatPrebuild,
-  assets,
-  contentFor,
 } from "@embroider/vite";
 import { babel } from "@rollup/plugin-babel";
+import basicSsl from "@vitejs/plugin-basic-ssl";
+import { defineConfig } from "vite";
+import mkcert from "vite-plugin-mkcert";
 import viteProxy from "./vite-proxy";
 
 const extensions = [
@@ -24,6 +26,7 @@ const extensions = [
 ];
 export default defineConfig(({ mode }) => {
   return {
+    base: "/@vite/",
     resolve: {
       extensions,
       alias: [
@@ -40,6 +43,7 @@ export default defineConfig(({ mode }) => {
       ],
     },
     plugins: [
+      // Standard Ember stuff
       hbs(),
       templateTag(),
       scripts(),
@@ -47,12 +51,14 @@ export default defineConfig(({ mode }) => {
       compatPrebuild(),
       assets(),
       contentFor(),
-      viteProxy(),
-
       babel({
         babelHelpers: "runtime",
         extensions,
       }),
+
+      // Discourse-specific
+      viteProxy(),
+      // mkcert(),
     ],
     optimizeDeps: {
       ...optimizeDeps(),
@@ -60,7 +66,15 @@ export default defineConfig(({ mode }) => {
     },
     server: {
       port: 4200,
+      strictPort: true,
+      // https: {
+      //   maxSessionMemory: 1000,
+      // },
     },
+    preview: {
+      port: 4200,
+      strictPort: true,
+    }
     build: {
       manifest: true,
       outDir: "dist",
@@ -80,6 +94,7 @@ export default defineConfig(({ mode }) => {
         },
       },
     },
+    clearScreen: false,
   };
 });
 

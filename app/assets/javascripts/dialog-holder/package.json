@@ -10,7 +10,9 @@
     "ember-cli-babel": "^8.2.0",
     "ember-cli-htmlbars": "^6.3.0",
     "ember-template-imports": "^4.2.0",
-    "truth-helpers": "workspace:*"
+    "truth-helpers": "workspace:*",
+    "@glimmer/component": "*",
+    "ember-source": "*"
   },
   "devDependencies": {
     "@types/jquery": "^3.5.32",

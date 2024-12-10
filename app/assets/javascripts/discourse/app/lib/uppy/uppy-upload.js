@@ -24,7 +24,9 @@ import { deepMerge } from "discourse-common/lib/object";
 import { bind } from "discourse-common/utils/decorators";
 import { i18n } from "discourse-i18n";
 
-export const HUGE_FILE_THRESHOLD_BYTES = 104_857_600; // 100MB
+const HUGE_FILE_THRESHOLD_BYTES = 104_857_600; // 100MB
+
+export { HUGE_FILE_THRESHOLD_BYTES };
 
 const DEFAULT_CONFIG = {
   uploadDone: null,

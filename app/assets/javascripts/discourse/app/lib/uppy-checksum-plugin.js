@@ -1,7 +1,8 @@
 import { Promise } from "rsvp";
 import { UploadPreProcessorPlugin } from "discourse/lib/uppy-plugin-base";
-import { HUGE_FILE_THRESHOLD_BYTES } from "discourse/mixins/uppy-upload";
+// import { HUGE_FILE_THRESHOLD_BYTES } from "discourse/mixins/uppy-upload";
 import { bind } from "discourse-common/utils/decorators";
+const HUGE_FILE_THRESHOLD_BYTES = 104_857_600;
 
 export default class UppyChecksum extends UploadPreProcessorPlugin {
   static pluginId = "uppy-checksum";
