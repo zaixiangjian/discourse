@@ -12,7 +12,8 @@ import { babel } from "@rollup/plugin-babel";
 import basicSsl from "@vitejs/plugin-basic-ssl";
 import { defineConfig } from "vite";
 import mkcert from "vite-plugin-mkcert";
-import viteProxy from "./vite-proxy";
+import transformHbr from "discourse-hbr/vite-plugin";
+import customProxy from "../custom-proxy";
 
 const extensions = [
   ".mjs",
@@ -51,13 +52,16 @@ export default defineConfig(({ mode }) => {
       compatPrebuild(),
       assets(),
       contentFor(),
+
+      transformHbr(),
+
       babel({
         babelHelpers: "runtime",
         extensions,
       }),
 
       // Discourse-specific
-      viteProxy(),
+      // viteProxy(),
       // mkcert(),
     ],
     optimizeDeps: {
@@ -67,6 +71,11 @@ export default defineConfig(({ mode }) => {
     server: {
       port: 4200,
       strictPort: true,
+
+      proxy: {
+        "^/(?!@vite/)": customProxy,
+      },
+
       // https: {
       //   maxSessionMemory: 1000,
       // },
@@ -74,7 +83,7 @@ export default defineConfig(({ mode }) => {
     preview: {
       port: 4200,
       strictPort: true,
-    }
+    },
     build: {
       manifest: true,
       outDir: "dist",

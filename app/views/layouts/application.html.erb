@@ -25,14 +25,14 @@
 
     <% add_resource_preload_list(script_asset_path("start-discourse"), "script") %>
     <% add_resource_preload_list(script_asset_path("browser-update"), "script") %>
-    <link rel="preload" href="<%= script_asset_path "start-discourse" %>" as="script" nonce="<%= csp_nonce_placeholder %>">
+    <link rel="preload" href="<%= script_asset_path "start-discourse" %>" as="script" nonce="<%= csp_nonce_placeholder %>" data-discourse-entrypoint="start-discourse">
     <link rel="preload" href="<%= script_asset_path "browser-update" %>" as="script" nonce="<%= csp_nonce_placeholder %>">
 
     <%= preload_script 'browser-detect' %>
 
     
-    <%= preload_script "vendor" %>
-    <%= preload_script "discourse" %>
+    <%= preload_script "vendor", typeModule: true %>
+    <%= preload_script "discourse", typeModule: true %>
     <%- Discourse.find_plugin_js_assets(include_official: allow_plugins?, include_unofficial: allow_third_party_plugins?, request: request).each do |file| %>
       <%= preload_script file %>
     <%- end %>
@@ -132,7 +132,7 @@
       </form>
     <% end %>
 
-    <script defer src="<%= script_asset_path "start-discourse" %>" nonce="<%= csp_nonce_placeholder %>"></script>
+    <script type="module" src="<%= script_asset_path "start-discourse" %>" nonce="<%= csp_nonce_placeholder %>" data-discourse-entrypoint="start-discourse"></script>
 
     <%= yield :data %>
 
@@ -147,10 +147,10 @@
     <%- end %>
 
     <!-- if development -->
-    <script type="module" src="http://localhost:4200/@vite/client"></script> 
+    <%# <script type="module" src="http://localhost:4200/@vite/@vite/client"></script>  %>
     <%# <script type="module" src="http://localhost:4200/main.js"></script> %>
-    <script src="/@vite/@embroider/virtual/vendor.js"></script>
-    <script type="module" src="/@vite/discourse.js"></script>
+    <%# <script src="/@vite/@embroider/virtual/vendor.js"></script>
+    <%# <script type="module" src="/@vite/discourse.js"></script> %>
     <%# <script type="module" src="/assets/main-B5pW4G5T.js"></script> %>
 
     <script nonce="<%= csp_nonce_placeholder %>">/* Workaround for https://bugs.webkit.org/show_bug.cgi?id=209261 */</script>

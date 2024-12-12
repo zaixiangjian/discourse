@@ -5,7 +5,7 @@ const seenNames = new Set();
 const moduleSets = [
   compatModules,
   import.meta.glob("./**/*.{gjs,js}", { eager: true }),
-  import.meta.glob("./**/*.hbs", { eager: true }),
+  import.meta.glob("./**/*.{hbs,hbr}", { eager: true }),
   import.meta.glob("../../discourse-common/addon/**/*.{gjs,js}", {
     eager: true,
   }),

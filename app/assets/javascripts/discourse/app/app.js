@@ -4,17 +4,10 @@ document.dispatchEvent(event);
 
 import "./deprecation-workflow";
 import "decorator-transforms/globals";
-import "./loader";
+import "./loader"; // todo, loader.js from npm?
 import "./loader-shims";
-import "./more-loader-shims";
-
-window.initLocale();
-// import compatModules from "@embroider/virtual/compat-modules";
-// for (const [path, module] of Object.entries(compatModules)) {
-//   window.define(path, [], () => module);
-// }
-
 import "./global-compat";
+import "./compat-modules";
 import { registerDiscourseImplicitInjections } from "discourse/lib/implicit-injections";
 
 // Register Discourse's standard implicit injections on common framework classes.
@@ -255,9 +248,6 @@ function printDebugInfo() {
 }
 
 export default Discourse;
-import environment from "./config/environment";
-const app = Discourse.create({ ...environment.APP });
-app.start();
 
 /**
  * @typedef {import('ember-source/types')} EmberTypes
