@@ -40,6 +40,7 @@ export default defineConfig(({ mode }) => {
         { find: "select-kit", replacement: "/../select-kit/addon" },
         { find: "float-kit", replacement: "/../float-kit/addon" },
         { find: "discourse", replacement: "/app" },
+        { find: "admin", replacement: "/../admin/addon" },
         // { find: "@ember-decorators", replacement: "ember-decorators" },
       ],
     },

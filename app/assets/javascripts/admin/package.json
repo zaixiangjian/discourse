@@ -14,9 +14,11 @@
     "@babel/core": "^7.26.0",
     "@ember/string": "^4.0.0",
     "discourse-common": "workspace:*",
+    "discourse-i18n": "workspace:*",
     "ember-cli-babel": "^8.2.0",
     "ember-cli-htmlbars": "^6.3.0",
-    "ember-template-imports": "^4.2.0"
+    "ember-template-imports": "^4.2.0",
+    "truth-helpers": "workspace:*"
   },
   "devDependencies": {
     "@ember/optional-features": "^2.2.0",

@@ -9,5 +9,6 @@ module.exports = function (defaults) {
   return maybeEmbroider(app, {
     staticComponents: false,
     staticHelpers: false,
+    staticModifiers: false,
   });
 };
