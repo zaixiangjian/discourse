@@ -30,7 +30,7 @@ task "assets:precompile:build" do
     end
 
     ember_env = ENV["EMBER_ENV"] || "production"
-    compile_command = "#{compile_command} -prod" if ember_env == "production"
+    # compile_command = "#{compile_command} -prod" if ember_env == "production"
     compile_command = "JOBS=#{jobs_env_count} #{compile_command}" if jobs_env_count
 
     only_ember_precompile_build_remaining = (ARGV.last == "assets:precompile:build")
