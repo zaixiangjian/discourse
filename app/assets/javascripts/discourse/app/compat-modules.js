@@ -2,7 +2,7 @@ import compatModules from "@embroider/virtual/compat-modules";
 
 const seenNames = new Set();
 
-const modules = {
+loadCompatModules({
   ...compatModules,
   ...import.meta.glob(
     [
@@ -20,16 +20,28 @@ const modules = {
     ],
     { eager: true }
   ),
-};
+});
 
-for (const [path, module] of Object.entries(modules)) {
-  let name = path
-    .replace("../../", "")
-    .replace("./", "discourse/")
-    .replace("/addon/", "/")
-    .replace(/\.\w+$/, "");
-  if (!seenNames.has(name)) {
-    seenNames.add(name);
-    window.define(name, [], () => module);
+export function loadCompatModules(modules) {
+  const allKeys = new Set();
+  for (const [path, module] of Object.entries(modules)) {
+    // Todo: move this logic into the build
+    // Also need handling for template-only components.
+    // Essentially, we need a version of Embroider's compatModules which
+    // works for all our other namespaces.
+    if (path.endsWith(".hbs") && allKeys.has(path.replace(".hbs", ".js"))) {
+      continue;
+    }
+
+    let name = path
+      .replace("../../", "")
+      .replace("./", "discourse/")
+      .replace("/addon/", "/")
+      .replace(/\.\w+$/, "");
+
+    if (!seenNames.has(name)) {
+      seenNames.add(name);
+      window.define(name, [], () => module);
+    }
   }
 }

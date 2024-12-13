@@ -15,6 +15,7 @@ import { defineConfig } from "vite";
 import mkcert from "vite-plugin-mkcert";
 import transformHbr from "discourse-hbr/vite-plugin";
 import customProxy from "../custom-proxy";
+import discourseTestSiteSettings from "./lib/site-settings-plugin";
 
 const extensions = [
   ".mjs",
@@ -40,7 +41,8 @@ export default defineConfig(({ mode }) => {
         },
         { find: "select-kit", replacement: "/../select-kit/addon" },
         { find: "float-kit", replacement: "/../float-kit/addon" },
-        { find: "discourse", replacement: "/app" },
+        // { find: "discourse/tests", replacement: "/tests" },
+        // { find: "discourse", replacement: "/app" },
         { find: "admin", replacement: "/../admin/addon" },
         // { find: "@ember-decorators", replacement: "ember-decorators" },
       ],
@@ -56,6 +58,7 @@ export default defineConfig(({ mode }) => {
       contentFor(),
 
       transformHbr(),
+      discourseTestSiteSettings(),
 
       babel({
         babelHelpers: "runtime",
@@ -90,6 +93,7 @@ export default defineConfig(({ mode }) => {
     build: {
       manifest: true,
       outDir: "dist",
+      sourcemap: true,
       rollupOptions: {
         input: {
           discourse: "discourse.js",

@@ -2,8 +2,13 @@ import loadEmberExam from "ember-exam/test-support/load";
 import { start } from "ember-qunit";
 import * as QUnit from "qunit";
 import { setup } from "qunit-dom";
+import { loadCompatModules } from "discourse/compat-modules";
+import config from "discourse/config/environment";
 import setupTests from "discourse/tests/setup-tests";
-import config from "../config/environment";
+
+loadCompatModules({
+  ...import.meta.glob("./**/*.{gjs,js}", { eager: true }),
+});
 
 document.addEventListener("discourse-init", () => {
   if (!window.EmberENV.TESTS_FILE_LOADED) {

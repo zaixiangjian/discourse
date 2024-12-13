@@ -132,7 +132,7 @@
       </form>
     <% end %>
 
-    <script type="module" src="<%= script_asset_path "start-discourse" %>" nonce="<%= csp_nonce_placeholder %>" data-discourse-entrypoint="start-discourse"></script>
+    <script type="module" src="<%= script_asset_path EmberCli.script_chunks["start-discourse"]&.first || "start-discourse" %>" nonce="<%= csp_nonce_placeholder %>" data-discourse-entrypoint="start-discourse"></script>
 
     <%= yield :data %>
 

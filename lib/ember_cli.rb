@@ -15,21 +15,19 @@ class EmberCli < ActiveSupport::CurrentAttributes
   def self.script_chunks
     return cache[:script_chunks] if cache[:script_chunks]
 
-    chunk_infos = JSON.parse(File.read("#{dist_dir}/assets.json"))
+    entrypoints = {}
 
-    chunk_infos.transform_keys! { |key| key.delete_prefix("assets/").delete_suffix(".js") }
+    vite_manifest = JSON.parse(File.read("#{dist_dir}/.vite/manifest.json"))
 
-    chunk_infos.transform_values! do |value|
-      value["assets"].map { |chunk| chunk.delete_prefix("assets/").delete_suffix(".js") }
+    vite_manifest.each do |key, value|
+      next unless value["isEntry"]
+      entrypoints[key.delete_suffix(".js")] = [
+        value["file"].delete_prefix("assets/").delete_suffix(".js"),
+      ]
     end
+    p entrypoints
 
-    # Special case - vendor.js is fingerprinted by Embroider in production, but not run through Webpack
-    if !assets.include?("vendor.js") &&
-         fingerprinted = assets.find { |a| a.match?(/^vendor\..*\.js$/) }
-      chunk_infos["vendor"] = [fingerprinted.delete_suffix(".js")]
-    end
-
-    cache[:script_chunks] = chunk_infos
+    cache[:script_chunks] = entrypoints
   rescue Errno::ENOENT
     {}
   end
