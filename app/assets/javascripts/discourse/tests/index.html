@@ -18,7 +18,6 @@
     {{content-for "head"}} {{content-for "test-head"}}
 
     <link rel="stylesheet" href="/@embroider/virtual/vendor.css" />
-    <!-- <link rel="stylesheet" href="/discourse.css" /> -->
     <link rel="stylesheet" href="/@embroider/virtual/test-support.css" />
 
     {{content-for "head-footer"}} {{content-for "test-head-footer"}}
@@ -50,15 +49,22 @@
 
     <script type="module" src="/@embroider/virtual/test-support.js"></script>
 
+    <script type="module">
+      import { setEnvironment } from "discourse-common/config/environment";
+      setEnvironment("testing");
+    </script>
+
+    <script type="module" src="./test-i18n.js"></script>
     <script type="module" src="/discourse.js"></script>
+    <script type="module" src="/admin.js"></script>
+    
 
     <!-- <script src="{{rootURL}}assets/test-i18n.js" data-embroider-ignore></script> -->
     <!-- <script src="{{rootURL}}assets/test-site-settings.js" data-embroider-ignore></script> -->
     <!-- <script type="module" src="/discourse.js" data-embroider-ignore></script> -->
 
     <script type="module">
-      import { setEnvironment } from "discourse-common/config/environment";
-      setEnvironment("testing");
+      import "../../../stylesheets/qunit.scss";
 
       import "./test-boot-ember-cli";
 

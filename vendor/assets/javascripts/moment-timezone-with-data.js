@@ -15,7 +15,7 @@
 	} else {
 		factory(root.moment);                        // Browser
 	}
-}(this, function (moment) {
+}(globalThis, function (moment) {
 	"use strict";
 
 	// Resolves es6 module loading issue

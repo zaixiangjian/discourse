@@ -6,9 +6,12 @@ import { loadCompatModules } from "discourse/compat-modules";
 import config from "discourse/config/environment";
 import setupTests from "discourse/tests/setup-tests";
 
-loadCompatModules({
-  ...import.meta.glob("./**/*.{gjs,js}", { eager: true }),
-});
+loadCompatModules(
+  {
+    ...import.meta.glob("./**/*.{gjs,js}", { eager: true }),
+  },
+  "discourse/tests/"
+);
 
 document.addEventListener("discourse-init", () => {
   if (!window.EmberENV.TESTS_FILE_LOADED) {

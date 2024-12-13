@@ -16,6 +16,7 @@ import mkcert from "vite-plugin-mkcert";
 import transformHbr from "discourse-hbr/vite-plugin";
 import customProxy from "../custom-proxy";
 import discourseTestSiteSettings from "./lib/site-settings-plugin";
+import discourseTestTranslations from "./lib/translation-plugin";
 
 const extensions = [
   ".mjs",
@@ -59,6 +60,7 @@ export default defineConfig(({ mode }) => {
 
       transformHbr(),
       discourseTestSiteSettings(),
+      discourseTestTranslations(),
 
       babel({
         babelHelpers: "runtime",
@@ -114,6 +116,13 @@ export default defineConfig(({ mode }) => {
       },
     },
     clearScreen: false,
+    css: {
+      preprocessorOptions: {
+        scss: {
+          loadPaths: ["../../stylesheets"],
+        },
+      },
+    },
   };
 });
 
