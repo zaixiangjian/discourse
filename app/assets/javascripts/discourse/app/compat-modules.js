@@ -2,39 +2,27 @@ import compatModules from "@embroider/virtual/compat-modules";
 
 const seenNames = new Set();
 
-const moduleSets = [
-  compatModules,
-  import.meta.glob("./**/*.{gjs,js}", { eager: true }),
-  import.meta.glob("./**/*.{hbs,hbr}", { eager: true }),
-  import.meta.glob("../../discourse-common/addon/**/*.{gjs,js}", {
-    eager: true,
-  }),
-  import.meta.glob("../../discourse-common/addon/**/*.hbs", {
-    eager: true,
-  }),
-  import.meta.glob("../../float-kit/addon/**/*.{gjs,js}", {
-    eager: true,
-  }),
-  import.meta.glob("../../float-kit/addon/**/*.hbs", {
-    eager: true,
-  }),
-  import.meta.glob("../../select-kit/addon/**/*.{gjs,js}", {
-    eager: true,
-  }),
-  import.meta.glob("../../select-kit/addon/**/*.hbs", {
-    eager: true,
-  }),
-  import.meta.glob("../../dialog-holder/addon/**/*.{gjs,js}", {
-    eager: true,
-  }),
-  import.meta.glob("../../dialog-holder/addon/**/*.hbs", {
-    eager: true,
-  }),
-]
-  .map((m) => Object.entries(m))
-  .flat();
+const modules = {
+  ...compatModules,
+  ...import.meta.glob(
+    [
+      "./**/*.{gjs,js}",
+      "./**/*.{hbs,hbr}",
+      "!./static/**/*",
+      "../../discourse-common/addon/**/*.{gjs,js}",
+      "../../discourse-common/addon/**/*.hbs",
+      "../../float-kit/addon/**/*.{gjs,js}",
+      "../../float-kit/addon/**/*.hbs",
+      "../../select-kit/addon/**/*.{gjs,js}",
+      "../../select-kit/addon/**/*.hbs",
+      "../../dialog-holder/addon/**/*.{gjs,js}",
+      "../../dialog-holder/addon/**/*.hbs",
+    ],
+    { eager: true }
+  ),
+};
 
-for (const [path, module] of moduleSets) {
+for (const [path, module] of Object.entries(modules)) {
   let name = path
     .replace("../../", "")
     .replace("./", "discourse/")

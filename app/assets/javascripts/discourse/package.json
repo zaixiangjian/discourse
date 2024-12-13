@@ -120,6 +120,7 @@
     "pretender": "^3.4.7",
     "qunit": "^2.23.1",
     "qunit-dom": "^3.4.0",
+    "rollup-plugin-visualizer": "^5.12.0",
     "sass": "^1.82.0",
     "select-kit": "workspace:*",
     "sinon": "^19.0.2",

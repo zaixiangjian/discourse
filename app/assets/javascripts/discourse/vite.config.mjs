@@ -10,6 +10,7 @@ import {
 } from "@embroider/vite";
 import { babel } from "@rollup/plugin-babel";
 import basicSsl from "@vitejs/plugin-basic-ssl";
+import { visualizer } from "rollup-plugin-visualizer";
 import { defineConfig } from "vite";
 import mkcert from "vite-plugin-mkcert";
 import transformHbr from "discourse-hbr/vite-plugin";
@@ -64,6 +65,7 @@ export default defineConfig(({ mode }) => {
       // Discourse-specific
       // viteProxy(),
       // mkcert(),
+      visualizer({ emitFile: true }),
     ],
     optimizeDeps: {
       ...optimizeDeps(),
@@ -90,17 +92,20 @@ export default defineConfig(({ mode }) => {
       outDir: "dist",
       rollupOptions: {
         input: {
-          main: "index.html",
+          discourse: "discourse.js",
+          vendor: "vendor.js",
+          "start-discourse": "start-discourse.js",
+          admin: "admin.js",
           ...(shouldBuildTests(mode)
             ? { tests: "tests/index.html" }
             : undefined),
         },
         output: {
-          manualChunks(id, { getModuleInfo }) {
-            if (id.includes("node_modules")) {
-              return "vendor";
-            }
-          },
+          // manualChunks(id, { getModuleInfo }) {
+          //   if (id.includes("node_modules")) {
+          //     return "vendor";
+          //   }
+          // },
         },
       },
     },

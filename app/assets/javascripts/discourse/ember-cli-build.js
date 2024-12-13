@@ -10,5 +10,7 @@ module.exports = function (defaults) {
     staticComponents: false,
     staticHelpers: false,
     staticModifiers: false,
+    splitAtRoutes: ["wizard"],
+    staticAppPaths: ["static"],
   });
 };
