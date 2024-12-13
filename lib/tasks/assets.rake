@@ -17,7 +17,7 @@ task "assets:precompile:build" do
     # Therefore, we cap it so that we don't spawn more processes than necessary.
     jobs_env_count = (2 if !ENV["JOBS"].present? && Etc.nprocessors > 2)
 
-    compile_command = "CI=1 pnpm --dir=app/assets/javascripts/discourse ember build"
+    compile_command = "CI=1 pnpm --dir=app/assets/javascripts/discourse vite build"
 
     heap_size_limit = check_node_heap_size_limit
 
