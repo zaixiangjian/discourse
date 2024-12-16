@@ -15,6 +15,7 @@ import { defineConfig } from "vite";
 import mkcert from "vite-plugin-mkcert";
 import transformHbr from "discourse-hbr/vite-plugin";
 import customProxy from "../custom-proxy";
+import customInvokableResolver from "./lib/custom-invokable-resolver";
 import discourseTestSiteSettings from "./lib/site-settings-plugin";
 import discourseTestTranslations from "./lib/translation-plugin";
 
@@ -61,6 +62,7 @@ export default defineConfig(({ mode }) => {
       transformHbr(),
       discourseTestSiteSettings(),
       discourseTestTranslations(),
+      customInvokableResolver(),
 
       babel({
         babelHelpers: "runtime",
