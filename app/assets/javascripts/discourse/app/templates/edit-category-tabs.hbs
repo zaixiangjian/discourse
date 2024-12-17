@@ -69,12 +69,12 @@
     <h3>{{this.selectedTabTitle}}</h3>
 
     {{#each this.panels as |tab|}}
-      {{component
+      {{!-- {{component
         tab
         selectedTab=this.selectedTab
         category=this.model
         registerValidator=(action "registerValidator")
-      }}
+      }} --}}
     {{/each}}
   </div>
 

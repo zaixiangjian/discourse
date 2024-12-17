@@ -99,11 +99,11 @@
           {{else}}
             {{#if this.hasData}}
               {{#if this.currentMode}}
-                {{component
+                {{!-- {{component
                   this.modeComponent
                   model=this.model
                   options=this.options
-                }}
+                }} --}}
 
                 {{#if this.model.relatedReport}}
                   <AdminReport
@@ -201,12 +201,12 @@
                 </span>
 
                 <div class="input">
-                  {{component
+                  {{!-- {{component
                     (concat "report-filters/" filter.type)
                     model=this.model
                     filter=filter
                     applyFilter=this.applyFilter
-                  }}
+                  }} --}}
                 </div>
               </div>
             {{/each}}

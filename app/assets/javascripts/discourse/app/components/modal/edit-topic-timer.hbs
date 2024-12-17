@@ -8,13 +8,13 @@
 >
   <:body>
     {{#if this.topicTimer}}
-      <EditTopicTimerForm
+      {{!-- <EditTopicTimerForm
         @topic={{@model.topic}}
         @topicTimer={{this.topicTimer}}
         @timerTypes={{this.publicTimerTypes}}
         @onChangeStatusType={{this.onChangeStatusType}}
         @onChangeInput={{this.onChangeInput}}
-      />
+      /> circular import issues --}}
     {{/if}}
   </:body>
   <:footer>

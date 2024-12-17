@@ -106,6 +106,9 @@ function updateScriptReferences({
 
 export default {
   target: "http://localhost:3000",
+  headers: {
+    "X-Discourse-Ember-CLI": "true",
+  },
   configure: (proxy, options) => {
     proxy.on("proxyRes", function (proxyRes, req, res) {
       if (proxyRes.statusMessage) {

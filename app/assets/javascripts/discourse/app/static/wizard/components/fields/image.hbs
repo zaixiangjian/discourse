@@ -17,10 +17,9 @@
 </label>
 
 {{#if this.field.value}}
-  {{component
-    this.previewComponent
-    field=this.field
-    fieldClass=this.fieldClass
-    wizard=this.wizard
-  }}
+  <this.previewComponent
+    field={{this.field}}
+    fieldClass={{this.fieldClass}}
+    wizard={{this.wizard}}
+  />
 {{/if}}

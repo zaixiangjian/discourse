@@ -1,10 +1,9 @@
-{{component
-  this.component
+<this.component
   class="wizard-container__dropdown"
-  value=this.field.value
-  content=this.field.choices
+  value={{this.field.value}}
+  content={{this.field.choices}}
   nameProperty="label"
   tabindex="9"
-  onChange=(action "onChangeValue")
-  options=(hash translatedNone=false)
-}}
+  onChange={{action "onChangeValue"}}
+  options={{hash translatedNone=false}}
+/>

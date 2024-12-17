@@ -1,12 +1,12 @@
 <div class="select-kit-header-wrapper">
   {{#each this.icons as |icon|}} {{d-icon icon}} {{/each}}
 
-  {{component
+  {{!-- {{component
     this.selectKit.options.selectedNameComponent
     tabindex=this.tabindex
     item=this.selectedContent
     selectKit=this.selectKit
-  }}
+  }} --}}
 
   {{#if this.shouldDisplayClearableButton}}
     <DButton

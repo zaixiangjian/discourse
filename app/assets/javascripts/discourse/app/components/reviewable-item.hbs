@@ -43,19 +43,19 @@
 
         {{#each this.reviewable.editable_fields as |f|}}
           <div class="editable-field {{dasherize f.id}}">
-            {{component
+            {{!-- {{component
               (concat "reviewable-field-" f.type)
               tagName=""
               value=(editable-value this.reviewable f.id)
               tagCategoryId=this.tagCategoryId
               valueChanged=(action "valueChanged" f.id)
               categoryChanged=(action "categoryChanged")
-            }}
+            }} --}}
           </div>
         {{/each}}
       </div>
     {{else}}
-      {{#let
+      {{!-- {{#let
         (component
           this.reviewableComponent reviewable=this.reviewable tagName=""
         )
@@ -65,7 +65,7 @@
         <ReviewableComponent>
           <ReviewableScores @reviewable={{this.reviewable}} @tagName="" />
         </ReviewableComponent>
-      {{/let}}
+      {{/let}} --}}
     {{/if}}
   </div>
 

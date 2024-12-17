@@ -1,10 +1,10 @@
-import compatModules from "@embroider/virtual/compat-modules";
+// import compatModules from "@embroider/virtual/compat-modules";
 
 const seenNames = new Set();
 
 loadCompatModules(
   {
-    ...compatModules,
+    // ...compatModules,
     ...import.meta.glob(
       [
         "./**/*.{gjs,js}",
@@ -18,10 +18,21 @@ loadCompatModules(
         "../../select-kit/addon/**/*.hbs",
         "../../dialog-holder/addon/**/*.{gjs,js}",
         "../../dialog-holder/addon/**/*.hbs",
+        "!**/components/**/*",
+        "!**/helpers/**/*",
+        "!**/modifiers/**/*",
       ],
       { eager: true }
     ),
+    ...import.meta.glob(
+      ["./helpers/{raw-plugin-outlet,plugin-outlet,raw-hash}.{gjs,js}"],
+      {
+        // raw-hbs helpers
+        eager: true,
+      }
+    ),
   },
+
   "discourse/"
 );
 

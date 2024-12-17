@@ -7,9 +7,9 @@ module.exports = function (defaults) {
   let app = new EmberApp(defaults, {});
 
   return maybeEmbroider(app, {
-    staticComponents: false,
-    staticHelpers: false,
-    staticModifiers: false,
+    staticComponents: true,
+    staticHelpers: true,
+    staticModifiers: true,
     splitAtRoutes: ["wizard"],
     staticAppPaths: ["static"],
   });

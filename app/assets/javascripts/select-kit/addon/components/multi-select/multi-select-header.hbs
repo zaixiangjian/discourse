@@ -7,20 +7,20 @@
     <div class="select-kit-header--filter">
       {{#if this.selectedContent.length}}
         {{#each this.selectedContent as |item|}}
-          {{component
+          {{!-- {{component
             this.selectKit.options.selectedChoiceComponent
             item=item
             selectKit=this.selectKit
-          }}
+          }} --}}
         {{/each}}
       {{/if}}
 
-      {{component
+      {{!-- {{component
         this.selectKit.options.filterComponent
         selectKit=this.selectKit
         id=(concat this.selectKit.uniqueID "-filter")
         hidePlaceholderWithSelection=true
-      }}
+      }} --}}
     </div>
   {{else}}
     <MultiSelect::FormatSelectedContent
