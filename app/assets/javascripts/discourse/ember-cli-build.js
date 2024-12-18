@@ -2,10 +2,10 @@
 
 const EmberApp = require("ember-cli/lib/broccoli/ember-app");
 const { maybeEmbroider } = require("@embroider/test-setup");
-const fs = require("fs");
+const { globSync } = require("glob");
 
 const allRoutes = [];
-fs.globSync("app/routes/**/*.js").forEach((file) => {
+globSync("app/routes/**/*.js").forEach((file) => {
   const route = file.match(/app\/routes\/(.*)\.js/)[1];
   allRoutes.push(route);
 });
