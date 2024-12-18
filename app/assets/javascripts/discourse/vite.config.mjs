@@ -29,9 +29,9 @@ const extensions = [
   ".hbs",
   ".json",
 ];
-export default defineConfig(({ mode }) => {
+export default defineConfig(({ mode, command }) => {
   return {
-    base: "/@vite/",
+    base: command === "build" ? "" : "./@vite/",
     resolve: {
       extensions,
       alias: [
