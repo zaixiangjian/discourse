@@ -1,31 +1,37 @@
-// import compatModules from "@embroider/virtual/compat-modules";
+import compatModules from "@embroider/virtual/compat-modules";
 
 const seenNames = new Set();
 
 loadCompatModules(
   {
     // ...compatModules,
+    // ...import.meta.glob(
+    //   [
+    //     "./**/*.{gjs,js}",
+    //     "./**/*.{hbs,hbr}",
+    //     "!./static/**/*",
+    //     "../../discourse-common/addon/**/*.{gjs,js}",
+    //     "../../discourse-common/addon/**/*.hbs",
+    //     "../../float-kit/addon/**/*.{gjs,js}",
+    //     "../../float-kit/addon/**/*.hbs",
+    //     "../../select-kit/addon/**/*.{gjs,js}",
+    //     "../../select-kit/addon/**/*.hbs",
+    //     "../../dialog-holder/addon/**/*.{gjs,js}",
+    //     "../../dialog-holder/addon/**/*.hbs",
+    //     "!**/components/**/*",
+    //     "!**/helpers/**/*",
+    //     "!**/modifiers/**/*",
+    //   ],
+    //   { eager: true }
+    // ),
     ...import.meta.glob(
       [
-        "./**/*.{gjs,js}",
-        "./**/*.{hbs,hbr}",
-        "!./static/**/*",
-        "../../discourse-common/addon/**/*.{gjs,js}",
-        "../../discourse-common/addon/**/*.hbs",
-        "../../float-kit/addon/**/*.{gjs,js}",
-        "../../float-kit/addon/**/*.hbs",
-        "../../select-kit/addon/**/*.{gjs,js}",
-        "../../select-kit/addon/**/*.hbs",
-        "../../dialog-holder/addon/**/*.{gjs,js}",
-        "../../dialog-holder/addon/**/*.hbs",
-        "!**/components/**/*",
-        "!**/helpers/**/*",
-        "!**/modifiers/**/*",
+        "./helpers/{raw-plugin-outlet,plugin-outlet,raw-hash}.{gjs,js}",
+        "./raw-templates/**/*",
+        "./initializers/*",
+        "./instance-initializers/*",
+        "./routes/app-route-map.js",
       ],
-      { eager: true }
-    ),
-    ...import.meta.glob(
-      ["./helpers/{raw-plugin-outlet,plugin-outlet,raw-hash}.{gjs,js}"],
       {
         // raw-hbs helpers
         eager: true,

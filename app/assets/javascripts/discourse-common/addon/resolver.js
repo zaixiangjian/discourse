@@ -266,9 +266,12 @@ export function buildResolver(baseName) {
     // If no match is found here, the resolver falls back to `resolveOther`.
     resolveRoute(parsedName) {
       if (parsedName.fullNameWithoutType === "basic") {
-        return requirejs("discourse/routes/discourse", null, null, true)
-          .default;
+        return this.resolveRoute("discourse");
       }
+    }
+
+    resolveController(parsedName) {
+      console.trace("lookup", parsedName);
     }
 
     resolveTemplate(parsedName) {
@@ -387,6 +390,19 @@ export function buildResolver(baseName) {
       }
 
       return resolved;
+    }
+
+    addModules(modules) {
+      console.log("adding", Object.keys(modules));
+      for (let [name, module] of Object.entries(modules)) {
+        define(name, [], () => module);
+      }
+      DiscourseTemplateMap.setModuleNames(Object.keys(requirejs.entries));
+      expireModuleTrieCache();
+      Object.keys(this._normalizeCache).forEach(
+        (key) => delete this._normalizeCache[key]
+      );
+      super.addModules(modules);
     }
   };
 }

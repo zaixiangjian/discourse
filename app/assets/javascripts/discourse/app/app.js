@@ -8,8 +8,9 @@ import "./loader"; // todo, loader.js from npm?
 import "./loader-shims";
 import "./global-compat";
 import "./compat-modules";
+import { importSync } from "@embroider/macros";
+import compatModules from "@embroider/virtual/compat-modules";
 import { registerDiscourseImplicitInjections } from "discourse/lib/implicit-injections";
-
 // Register Discourse's standard implicit injections on common framework classes.
 registerDiscourseImplicitInjections();
 
@@ -32,7 +33,16 @@ class Discourse extends Application {
     paste: "paste",
   };
 
-  Resolver = buildResolver("discourse");
+  Resolver = buildResolver("discourse").withModules({
+    ...compatModules,
+
+    "discourse/templates/discovery/list": importSync(
+      "discourse/templates/discovery/list"
+    ),
+    "discourse/controllers/discovery/list": importSync(
+      "discourse/controllers/discovery/list"
+    ),
+  });
 
   // Start up the Discourse application by running all the initializers we've defined.
   start() {
