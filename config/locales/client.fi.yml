@@ -2050,6 +2050,9 @@ fi:
       optional: valinnainen
       errors_summary_title: "Tämä lomake sisältää virheitä:"
       dirty_form: "Et lähettänyt muutoksiasi! Oletko varma, että haluat poistua?"
+      select:
+        select_placeholder: "Valitse…"
+        none_placeholder: "Ei valittu"
       errors:
         required: "Pakollinen"
         invalid_url: "Täytyy olla kelvollinen URL"
@@ -4795,8 +4798,7 @@ fi:
           experiment_disabled: "Olet poistanut kokeellisen ominaisuuden käytöstä."
           experiment_toggled_too_fast: "Olet ottanut kokeellisen ominaisuuden käyttöön ja poistanut sen käytöstä liian nopeasti. Odota muutama sekunti ennen kuin yrität uudelleen."
           experiment_tooltip:
-            title: "Kokeile kokeellista ominaisuuttamme"
-            content: "Kokeile uusinta kehitysvaiheessa olevaa ominaisuuttamme! Se on vielä kokeiluvaiheessa, joten voimme poistaa sen milloin tahansa. Voit poistaa sen käytöstä milloin tahansa."
+            title_disabled: "Kokeile kokeellista ominaisuuttamme"
         last_checked: "Viimeksi tarkistettu"
         refresh_problems: "Päivitä"
         no_problems: "Ongelmia ei löytynyt."
@@ -6643,6 +6645,8 @@ fi:
             title: "Lataa kuvia"
         selectable_avatars:
           title: "Avatarit, joista käyttäjä voi valita"
+        table_column_heading:
+          status: "Tila"
         categories:
           all_results: "Kaikki"
           required: "Pakolliset"

@@ -2050,6 +2050,9 @@ nl:
       optional: optioneel
       errors_summary_title: "Dit formulier bevat fouten:"
       dirty_form: "Je hebt je wijzigingen niet verzonden! Weet je zeker dat je wilt verlaten?"
+      select:
+        select_placeholder: "Selecteren…"
+        none_placeholder: "Geen"
       errors:
         required: "Vereist"
         invalid_url: "Moet een geldige URL zijn"
@@ -4795,8 +4798,7 @@ nl:
           experiment_disabled: "Je hebt de experimentele functie uitgeschakeld."
           experiment_toggled_too_fast: "Je hebt de experimentele functie te snel geschakeld. Wacht een paar seconden voordat je het opnieuw probeert."
           experiment_tooltip:
-            title: "Probeer onze experimentele functie"
-            content: "Probeer onze nieuwste in ontwikkeling zijnde functie eens! Hij is nog in de experimentele fase, dus we kunnen hem op elk moment verwijderen. Je kunt je afmelden wanneer je maar wilt."
+            title_disabled: "Probeer onze experimentele functie"
         last_checked: "Laatst gecontroleerd"
         refresh_problems: "Vernieuwen"
         no_problems: "Er zijn geen problemen gevonden."
@@ -6644,6 +6646,8 @@ nl:
             title: "Afbeeldingen uploaden"
         selectable_avatars:
           title: "Lijst van avatars waaruit gebruikers kunnen kiezen"
+        table_column_heading:
+          status: "Status"
         categories:
           all_results: "Alle"
           required: "Vereist"

@@ -2050,6 +2050,9 @@ pt_BR:
       optional: opcional
       errors_summary_title: "Este formulário contém erros:"
       dirty_form: "Você não enviou as alterações! Deseja mesmo sair?"
+      select:
+        select_placeholder: "Selecionar…"
+        none_placeholder: "Nenhum"
       errors:
         required: "Necessário(a)"
         invalid_url: "Deve ser uma URL válida"
@@ -4795,8 +4798,7 @@ pt_BR:
           experiment_disabled: "Você desativou o recurso experimental."
           experiment_toggled_too_fast: "Você alternou o recurso experimental rápido demais. Aguarde um pouco e tente novamente."
           experiment_tooltip:
-            title: "Teste nosso recurso experimental"
-            content: "Dê uma chance para o nosso recurso mais recente que ainda está em desenvolvimento! Por estar em fase experimental, ele poderá ser removido a qualquer momento. Você pode decidir que não quando quiser."
+            title_disabled: "Teste nosso recurso experimental"
         last_checked: "Última verificação"
         refresh_problems: "Atualizar"
         no_problems: "Nenhum problema foi encontrado."
@@ -6644,6 +6646,8 @@ pt_BR:
             title: "Enviar imagens"
         selectable_avatars:
           title: "Lista de avatares que os usuários podem escolher"
+        table_column_heading:
+          status: "Status"
         categories:
           all_results: "Tudo"
           required: "Necessário(a)"

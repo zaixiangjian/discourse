@@ -19,6 +19,8 @@ RSpec.describe UsersController do
   # late for fab! to work.
   let(:user_deferred) { Fabricate(:user, refresh_auto_groups: true) }
 
+  before { SiteSetting.hide_email_address_taken = false }
+
   describe "#full account registration flow" do
     it "will correctly handle honeypot and challenge" do
       get "/session/hp.json"
@@ -4252,6 +4254,12 @@ RSpec.describe UsersController do
   end
 
   describe "#summary" do
+    before do
+      user.user_stat.update!(post_count: 1)
+      user1.user_stat.update!(post_count: 1)
+      user_deferred.user_stat.update!(post_count: 1)
+    end
+
     it "generates summary info" do
       create_post(user: user)
 
@@ -4261,7 +4269,7 @@ RSpec.describe UsersController do
       json = response.parsed_body
 
       expect(json["user_summary"]["topic_count"]).to eq(1)
-      expect(json["user_summary"]["post_count"]).to eq(0)
+      expect(json["user_summary"]["post_count"]).to eq(1)
     end
 
     context "when `hide_user_profiles_from_public` site setting is enabled" do
@@ -4937,6 +4945,8 @@ RSpec.describe UsersController do
   describe "#cards" do
     fab!(:user) { Discourse.system_user }
     fab!(:user2) { Fabricate(:user) }
+
+    before { user2.user_stat.update!(post_count: 1) }
 
     it "returns success" do
       get "/user-cards.json?user_ids=#{user.id},#{user2.id}"

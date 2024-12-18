@@ -2050,6 +2050,9 @@ it:
       optional: facoltativo
       errors_summary_title: "Questo modulo contiene errori:"
       dirty_form: "Non hai caricato le modifiche! Vuoi davvero uscire?"
+      select:
+        select_placeholder: "Seleziona…"
+        none_placeholder: "Nessuna"
       errors:
         required: "Obbligatorio"
         invalid_url: "L'URL deve essere valido"
@@ -4795,8 +4798,7 @@ it:
           experiment_disabled: "Hai disattivato la funzionalità sperimentale."
           experiment_toggled_too_fast: "Hai attivato la funzionalità sperimentale troppo velocemente. Attendi qualche secondo prima di riprovare."
           experiment_tooltip:
-            title: "Prova la nostra funzionalità sperimentale"
-            content: "Prova la nostra nuova funzionalità in fase di sviluppo! È ancora in fase sperimentale, quindi potremmo rimuoverla in qualsiasi momento. Puoi disattivarla quando vuoi."
+            title_disabled: "Prova la nostra funzionalità sperimentale"
         last_checked: "Ultimo controllo"
         refresh_problems: "Aggiorna"
         no_problems: "Nessun problema rilevato."
@@ -6644,6 +6646,8 @@ it:
             title: "Carica immagini"
         selectable_avatars:
           title: "Elenco degli Avatar tra cui l'utente può scegliere"
+        table_column_heading:
+          status: "Stato"
         categories:
           all_results: "Tutte"
           required: "Obbligatorie"

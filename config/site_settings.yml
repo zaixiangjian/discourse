@@ -621,7 +621,7 @@ login:
     list_type: simple
   hide_email_address_taken:
     client: true
-    default: false
+    default: true
   log_out_strict: false
   pending_users_reminder_delay_minutes:
     min: -1
@@ -2460,7 +2460,6 @@ developer:
     default: "1|2"
     allow_any: false
     refresh: true
-    hidden: true
   warn_critical_js_deprecations:
     default: true
     client: true
@@ -3344,27 +3343,16 @@ experimental:
     refresh: true
   glimmer_post_menu_mode:
     client: true
-    hidden: true
     type: enum
     choices:
       - disabled
       - auto
       - enabled
-    default: disabled
-  glimmer_post_menu_groups:
-    client: true
-    type: group_list
-    list_type: compact
-    default: ""
-    allow_any: false
-    refresh: true
+    default: auto
   enable_experimental_lightbox:
     default: false
     client: true
     hidden: true
-  experimental_topics_filter:
-    client: true
-    default: true
   enable_rich_text_paste:
     client: true
     default: true

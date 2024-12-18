@@ -33,9 +33,6 @@ export default {
           },
         });
       },
-      dropdown() {
-        return this.site.mobileView;
-      },
       classNames: ["share-and-invite"],
       dependentKeys: [
         "topic.shareUrl",
@@ -119,6 +116,7 @@ export default {
       label: "topic.defer.title",
       title: "topic.defer.help",
       action: "deferTopic",
+      classNames: ["defer-topic"],
       displayed() {
         return this.canDefer;
       },

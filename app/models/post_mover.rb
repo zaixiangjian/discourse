@@ -92,16 +92,20 @@ class PostMover
           Post.types[:whisper],
         )
         .count
-    moving_all_posts = original_topic_posts_count == posts.length
+    @full_move = original_topic_posts_count == posts.length
 
     @first_post_number_moved =
       posts.first.is_first_post? ? posts[1]&.post_number : posts.first.post_number
 
-    if @options[:freeze_original] # in this case we need to add the moderator post after the last copied post
-      from_posts = @original_topic.ordered_posts.where("post_number > ?", posts.last.post_number)
-      shift_post_numbers(from_posts) if !moving_all_posts
-
-      @first_post_number_moved = posts.last.post_number + 1
+    if @options[:freeze_original]
+      # in this case we need to add the moderator post after the last copied post
+      if @full_move
+        @first_post_number_moved = @original_topic.ordered_posts.last.post_number + 1
+      else
+        from_posts = @original_topic.ordered_posts.where("post_number > ?", posts.last.post_number)
+        shift_post_numbers(from_posts)
+        @first_post_number_moved = posts.last.post_number + 1
+      end
     end
 
     move_each_post
@@ -114,7 +118,7 @@ class PostMover
     update_upload_security_status
     update_bookmarks
 
-    close_topic_and_schedule_deletion if moving_all_posts
+    close_topic_and_schedule_deletion if @full_move
 
     destination_topic.reload
     DiscourseEvent.trigger(
@@ -278,8 +282,15 @@ class PostMover
     new_post.custom_fields = post.custom_fields
     new_post.save_custom_fields
 
+    # When freezing original, ensure the notification generated points
+    # to the newly created post, not the old OP
+    if @options[:freeze_original]
+      @post_ids_after_move =
+        @post_ids_after_move.map { |post_id| post_id == post.id ? new_post.id : post_id }
+    end
+
     DiscourseEvent.trigger(:first_post_moved, new_post, post)
-    DiscourseEvent.trigger(:post_moved, new_post, original_topic.id)
+    DiscourseEvent.trigger(:post_moved, new_post, original_topic.id, post)
 
     # we don't want to keep the old topic's OP bookmarked when we are
     # moving it into a new topic
@@ -316,7 +327,7 @@ class PostMover
         @post_ids_after_move.map { |post_id| post_id == post.id ? moved_post.id : post_id }
     end
 
-    DiscourseEvent.trigger(:post_moved, moved_post, original_topic.id)
+    DiscourseEvent.trigger(:post_moved, moved_post, original_topic.id, post)
 
     # Move any links from the post to the new topic
     moved_post.topic_links.update_all(topic_id: destination_topic.id)
@@ -359,10 +370,11 @@ class PostMover
     metadata[:created_new_topic] = @creating_new_topic
     metadata[:old_topic_title] = @original_topic_title
     metadata[:user_id] = @user.id
+    metadata[:full_move] = @full_move
 
     DB.exec(<<~SQL, metadata)
-      INSERT INTO moved_posts(old_topic_id, old_topic_title, old_post_id, old_post_number, post_user_id, user_id, new_topic_id, new_topic_title, new_post_id, new_post_number, created_new_topic, created_at, updated_at)
-      VALUES (:old_topic_id, :old_topic_title, :old_post_id, :old_post_number, :post_user_id, :user_id, :new_topic_id, :new_topic_title, :new_post_id, :new_post_number, :created_new_topic, :now, :now)
+      INSERT INTO moved_posts(old_topic_id, old_topic_title, old_post_id, old_post_number, post_user_id, user_id, full_move, new_topic_id, new_topic_title, new_post_id, new_post_number, created_new_topic, created_at, updated_at)
+      VALUES (:old_topic_id, :old_topic_title, :old_post_id, :old_post_number, :post_user_id, :user_id, :full_move, :new_topic_id, :new_topic_title, :new_post_id, :new_post_number, :created_new_topic, :now, :now)
     SQL
   end
 
@@ -470,17 +482,22 @@ class PostMover
   def copy_shifted_post_timings_from_temp
     DB.exec <<~SQL
       INSERT INTO post_timings (topic_id, user_id, post_number, msecs)
-      SELECT topic_id, user_id, post_number, msecs FROM temp_post_timings
+      SELECT DISTINCT ON (topic_id, post_number, user_id) topic_id, user_id, post_number, msecs
+      FROM temp_post_timings
+      ORDER BY topic_id, post_number, user_id, msecs DESC
+      ON CONFLICT (topic_id, post_number, user_id) DO UPDATE
+        SET msecs = GREATEST(post_timings.msecs, excluded.msecs)
     SQL
   end
 
   def copy_first_post_timings
-    DB.exec <<~SQL
+    DB.exec(<<~SQL, post_ids: @post_ids_after_move)
       INSERT INTO post_timings (topic_id, user_id, post_number, msecs)
       SELECT mp.new_topic_id, pt.user_id, mp.new_post_number, pt.msecs
       FROM post_timings pt
-           JOIN moved_posts mp ON (pt.topic_id = mp.old_topic_id AND pt.post_number = mp.old_post_number)
+      JOIN moved_posts mp ON (pt.topic_id = mp.old_topic_id AND pt.post_number = mp.old_post_number)
       WHERE mp.old_post_id <> mp.new_post_id
+        AND mp.old_post_id IN (:post_ids)
       ON CONFLICT (topic_id, post_number, user_id) DO UPDATE
         SET msecs = GREATEST(post_timings.msecs, excluded.msecs)
     SQL
@@ -497,7 +514,7 @@ class PostMover
   end
 
   def move_post_timings
-    DB.exec <<~SQL
+    DB.exec(<<~SQL, post_ids: @post_ids_after_move)
       UPDATE post_timings pt
       SET topic_id    = mp.new_topic_id,
           post_number = mp.new_post_number
@@ -506,6 +523,7 @@ class PostMover
         AND pt.post_number = mp.old_post_number
         AND mp.old_post_id = mp.new_post_id
         AND mp.old_topic_id <> mp.new_topic_id
+        AND mp.new_post_id IN (:post_ids)
     SQL
   end
 
@@ -604,23 +622,38 @@ class PostMover
     move_type_str = PostMover.move_types[@move_type].to_s
     move_type_str.sub!("topic", "message") if @move_to_pm
 
+    topic_link =
+      if posts.first.is_first_post?
+        "[#{destination_topic.title}](#{destination_topic.relative_url})"
+      else
+        "[#{destination_topic.title}](#{posts.first.relative_url})"
+      end
+
+    post_type = @move_to_pm ? Post.types[:whisper] : Post.types[:small_action]
+
+    continue =
+      DiscoursePluginRegistry.apply_modifier(
+        :post_mover_create_moderator_post,
+        true,
+        user: user,
+        post_type: post_type,
+        post_ids: @post_ids_after_move,
+        full_move: @full_move,
+        original_topic: original_topic,
+        destination_topic: destination_topic,
+        first_post_number_moved: @first_post_number_moved,
+      )
+    return if !continue
+
     message =
       I18n.with_locale(SiteSetting.default_locale) do
         I18n.t(
           "move_posts.#{move_type_str}_moderator_post",
           count: posts.length,
-          topic_link:
-            (
-              if posts.first.is_first_post?
-                "[#{destination_topic.title}](#{destination_topic.relative_url})"
-              else
-                "[#{destination_topic.title}](#{posts.first.relative_url})"
-              end
-            ),
+          topic_link: topic_link,
         )
       end
 
-    post_type = @move_to_pm ? Post.types[:whisper] : Post.types[:small_action]
     original_topic.add_moderator_post(
       user,
       message,
