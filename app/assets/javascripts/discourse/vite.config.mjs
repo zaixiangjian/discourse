@@ -31,7 +31,7 @@ const extensions = [
 ];
 export default defineConfig(({ mode, command }) => {
   return {
-    base: command === "build" ? "" : "./@vite/",
+    base: command === "build" ? "" : "/@vite/",
     resolve: {
       extensions,
       alias: [
