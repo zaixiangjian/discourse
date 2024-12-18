@@ -55,7 +55,7 @@ Sprockets::Asset.prepend(
   Module.new do
     def digest_path
       # Webpack chunks are already named based on their contents
-      return logical_path if logical_path.start_with?("chunk.")
+      return logical_path # if logical_path.start_with?("chunk.")
       super
     end
   end,
