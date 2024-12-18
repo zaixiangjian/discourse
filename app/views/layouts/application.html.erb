@@ -36,12 +36,12 @@
     <%- end %>
 
     <%- if staff? %>
-      <%= preload_script_url ExtraLocalesController.url("admin") %>
-      <%= preload_script "admin", typeModule: true %>
+      <%# <%= preload_script_url ExtraLocalesController.url("admin") %> %>
+      <%# <%= preload_script "admin", typeModule: true %> %>
     <%- end %>
 
     <%- if admin? %>
-      <%= preload_script_url ExtraLocalesController.url("wizard") %>
+      <%# <%= preload_script_url ExtraLocalesController.url("wizard") %> %>
     <%- end %>
 
     <%- unless customization_disabled? %>
