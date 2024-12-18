@@ -1,4 +1,5 @@
 import Component from "@glimmer/component";
+import { tracked } from "@glimmer/tracking";
 import { hash } from "@ember/helper";
 import { action } from "@ember/object";
 import { isDocumentRTL } from "discourse/lib/text-direction";
@@ -6,9 +7,10 @@ import { prefersReducedMotion } from "discourse/lib/utilities";
 import { isTesting } from "discourse-common/config/environment";
 import discourseLater from "discourse-common/lib/later";
 import closeOnClickOutside from "../../modifiers/close-on-click-outside";
-import UserMenu from "../user-menu/menu";
 
 export default class UserMenuWrapper extends Component {
+  @tracked _userMenuComponent;
+
   @action
   clickOutside(e) {
     if (
@@ -41,6 +43,16 @@ export default class UserMenuWrapper extends Component {
     }
   }
 
+  get userMenuComponent() {
+    if (this._userMenuComponent) {
+      return this._userMenuComponent;
+    }
+    import("../user-menu/menu").then(
+      (module) => (this._userMenuComponent = module.default)
+    );
+    return <template>Loading...</template>;
+  }
+
   <template>
     <div
       class="user-menu-dropdown-wrapper"
@@ -53,7 +65,7 @@ export default class UserMenuWrapper extends Component {
       }}
       ...attributes
     >
-      <UserMenu @closeUserMenu={{@toggleUserMenu}} />
+      <this.userMenuComponent @closeUserMenu={{@toggleUserMenu}} />
     </div>
   </template>
 }

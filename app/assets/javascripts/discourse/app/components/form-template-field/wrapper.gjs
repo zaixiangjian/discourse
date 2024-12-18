@@ -2,7 +2,6 @@ import Component from "@glimmer/component";
 import { tracked } from "@glimmer/tracking";
 import { action, get } from "@ember/object";
 import didUpdate from "@ember/render-modifiers/modifiers/did-update";
-import Yaml from "js-yaml";
 import FormTemplate from "discourse/models/form-template";
 import CheckboxField from "./checkbox";
 import DropdownField from "./dropdown";
@@ -48,8 +47,9 @@ export default class FormTemplateFieldWrapper extends Component {
     }
   }
 
-  _loadTemplate(templateContent) {
+  async _loadTemplate(templateContent) {
     try {
+      const Yaml = await import("js-yaml").default;
       this.parsedTemplate = Yaml.load(templateContent);
 
       this.args.onSelectFormTemplate?.(this.parsedTemplate);

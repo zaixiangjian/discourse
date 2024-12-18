@@ -81,7 +81,11 @@
             </div>
           {{/if}}
 
-          <EmojiGroupSections />
+          {{#if this.groupSectionsComponent}}
+            <this.groupSectionsComponent />
+          {{else}}
+            Loading...
+          {{/if}}
 
           {{#each-in this.customEmojis as |group emojis|}}
             <div class="section" data-section="custom-{{group}}">

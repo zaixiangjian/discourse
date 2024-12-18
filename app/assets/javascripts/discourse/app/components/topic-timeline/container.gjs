@@ -210,7 +210,7 @@ export default class TopicTimelineScrollArea extends Component {
 
   get scrollareaHeight() {
     const composerHeight =
-        document.getElementById("reply-control").offsetHeight || 0,
+        document.getElementById("reply-control")?.offsetHeight || 0,
       headerHeight = document.querySelector(".d-header")?.offsetHeight || 0;
 
     // scrollarea takes up about half of the timeline's height

@@ -103,7 +103,7 @@ export default defineConfig(({ mode }) => {
           discourse: "discourse.js",
           vendor: "vendor.js",
           "start-discourse": "start-discourse.js",
-          admin: "admin.js",
+          // admin: "admin.js",
           ...(shouldBuildTests(mode)
             ? { tests: "tests/index.html" }
             : undefined),

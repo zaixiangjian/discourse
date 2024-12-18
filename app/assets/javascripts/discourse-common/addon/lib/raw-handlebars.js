@@ -1,4 +1,4 @@
-import Handlebars from "handlebars";
+import Handlebars from "handlebars/runtime.js";
 
 // This is a mechanism for quickly rendering templates which is Ember aware
 // templates are highly compatible with Ember so you don't need to worry about calling "get"

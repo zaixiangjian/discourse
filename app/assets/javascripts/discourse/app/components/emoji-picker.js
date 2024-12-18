@@ -1,3 +1,4 @@
+import { tracked } from "@glimmer/tracking";
 import Component from "@ember/component";
 import { action, computed } from "@ember/object";
 import { schedule } from "@ember/runloop";
@@ -16,7 +17,6 @@ import { emojiUnescape, emojiUrlFor } from "discourse/lib/text";
 import { escapeExpression } from "discourse/lib/utilities";
 import discourseLater from "discourse-common/lib/later";
 import discourseComputed, { bind } from "discourse-common/utils/decorators";
-
 function customEmojis() {
   const groups = [];
   for (const [code, emoji] of extendedEmojiList()) {
@@ -42,6 +42,17 @@ export default class EmojiPicker extends Component {
     searchInput: ".emoji-picker-search-container input",
     picker: ".emoji-picker-emoji-area",
   };
+
+  @tracked _groupSectionsComponent;
+
+  get groupSectionsComponent() {
+    if (this._groupSectionsComponent) {
+      return this._groupSectionsComponent;
+    }
+    import("./emoji-group-sections").then(
+      (module) => (this._groupSectionsComponent = module.default)
+    );
+  }
 
   didInsertElement() {
     super.didInsertElement(...arguments);

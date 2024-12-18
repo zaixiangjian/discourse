@@ -1,5 +1,5 @@
 import { setOwner } from "@ember/owner";
-import Handlebars from "handlebars";
+import Handlebars from "handlebars/runtime.js";
 import {
   createHelperContext,
   registerHelpers,
