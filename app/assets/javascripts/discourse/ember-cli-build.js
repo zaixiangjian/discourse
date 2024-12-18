@@ -7,6 +7,9 @@ const { globSync } = require("glob");
 const allRoutes = [];
 globSync("app/routes/**/*.js").forEach((file) => {
   const route = file.match(/app\/routes\/(.*)\.js/)[1];
+  if (route === "application") {
+    return;
+  }
   allRoutes.push(route);
 });
 // console.log(allRoutes);

@@ -32,6 +32,38 @@ class EmberCli < ActiveSupport::CurrentAttributes
     {}
   end
 
+  def self.route_bundles
+    vite_manifest = JSON.parse(File.read("#{dist_dir}/.vite/manifest.json"))
+
+    route_bundles = {}
+
+    vite_manifest.each do |key, value|
+      next unless route = key[/\Aembroider_virtual:.*:route=(.*)\z/, 1]
+      route_bundles[route] = deep_preloads_for(key)
+    end
+
+    route_bundles
+  end
+
+  def self.deep_preloads_for(asset)
+    vite_manifest = JSON.parse(File.read("#{dist_dir}/.vite/manifest.json"))
+
+    preloads = []
+    seen = Set.new
+    seen.add(asset)
+
+    asset = vite_manifest[asset]
+    preloads.push asset["file"].delete_prefix("assets/").delete_suffix(".js")
+
+    asset["imports"]&.each do |import|
+      next if seen.include?(import)
+      seen.add(import)
+      preloads.push(*deep_preloads_for(import))
+    end
+
+    preloads
+  end
+
   def self.is_ember_cli_asset?(name)
     assets.include?(name) || script_chunks.values.flatten.include?(name.delete_suffix(".js"))
   end
