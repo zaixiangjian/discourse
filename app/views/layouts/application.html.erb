@@ -22,9 +22,6 @@
     <%- end %>
 
     <%= build_plugin_html 'server:before-script-load' %>
-
-    <%# <%= preload_script 'browser-detect' %> %>
-
     
     <%= preload_script "vendor", typeModule: true %>
     <%= preload_script "discourse", typeModule: true %>
@@ -33,15 +30,6 @@
     <%= preload_script_url ExtraLocalesController.url("mf") %>
     <%- if ExtraLocalesController.client_overrides_exist? %>
       <%= preload_script_url ExtraLocalesController.url("overrides") %>
-    <%- end %>
-
-    <%- if staff? %>
-      <%# <%= preload_script_url ExtraLocalesController.url("admin") %> %>
-      <%# <%= preload_script "admin", typeModule: true %> %>
-    <%- end %>
-
-    <%- if admin? %>
-      <%# <%= preload_script_url ExtraLocalesController.url("wizard") %> %>
     <%- end %>
 
     <%- unless customization_disabled? %>
@@ -128,8 +116,6 @@
 
     <%= yield :data %>
 
-    <%# <script defer src="<%= script_asset_path "browser-update" %>" nonce="<%= csp_nonce_placeholder %>"></script> %>
-
     <%- unless customization_disabled? %>
       <%= theme_lookup("body_tag") %>
     <%- end %>
@@ -137,13 +123,6 @@
     <%- if allow_plugins? %>
       <%= build_plugin_html 'server:before-body-close' %>
     <%- end %>
-
-    <!-- if development -->
-    <%# <script type="module" src="http://localhost:4200/@vite/@vite/client"></script>  %>
-    <%# <script type="module" src="http://localhost:4200/main.js"></script> %>
-    <%# <script src="/@vite/@embroider/virtual/vendor.js"></script>
-    <%# <script type="module" src="/@vite/discourse.js"></script> %>
-    <%# <script type="module" src="/assets/main-B5pW4G5T.js"></script> %>
 
     <script nonce="<%= csp_nonce_placeholder %>">/* Workaround for https://bugs.webkit.org/show_bug.cgi?id=209261 */</script>
   </body>
