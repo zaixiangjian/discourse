@@ -23,7 +23,7 @@
 
     <%= build_plugin_html 'server:before-script-load' %>
 
-    <%= preload_script 'browser-detect' %>
+    <%# <%= preload_script 'browser-detect' %> %>
 
     
     <%= preload_script "vendor", typeModule: true %>
@@ -131,7 +131,7 @@
 
     <%= yield :data %>
 
-    <script defer src="<%= script_asset_path "browser-update" %>" nonce="<%= csp_nonce_placeholder %>"></script>
+    <%# <script defer src="<%= script_asset_path "browser-update" %>" nonce="<%= csp_nonce_placeholder %>"></script> %>
 
     <%- unless customization_disabled? %>
       <%= theme_lookup("body_tag") %>
