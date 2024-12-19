@@ -43,6 +43,8 @@ class EmberCli < ActiveSupport::CurrentAttributes
     end
 
     route_bundles
+  rescue Errno::ENOENT
+    {}
   end
 
   def self.deep_preloads_for(asset)

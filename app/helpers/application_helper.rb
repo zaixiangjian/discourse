@@ -714,7 +714,7 @@ module ApplicationHelper
 
     modules_to_preload = EmberCli.route_bundles[ember_route_name]
 
-    modules_to_preload.map { |module_name| <<~HTML }.join("\n").html_safe
+    modules_to_preload&.map { |module_name| <<~HTML }&.join("\n")&.html_safe
         <link rel="modulepreload" href="#{script_asset_path(module_name)}" />
       HTML
   end
