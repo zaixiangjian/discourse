@@ -1035,7 +1035,8 @@ module Discourse
       Rails.logger.warn(warning)
       begin
         Discourse.redis.without_namespace.setex(redis_key, 3600, "x")
-      rescue Redis::ReadOnlyError
+      rescue Redis::CommandError => e
+        raise unless e.message =~ /READONLY/
       end
     end
     warning
@@ -1047,7 +1048,7 @@ module Discourse
     GlobalSetting
       .redis_config
       .dup
-      .except(:client_implementation, :custom)
+      .except(:connector, :replica_host, :replica_port)
       .tap { |config| config.merge!(db: config[:db].to_i + 1) unless old }
   end
 

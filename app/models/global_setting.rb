@@ -50,8 +50,8 @@ class GlobalSetting
         end
         token
       end
-  rescue Redis::ReadOnlyError
-    @safe_secret_key_base = SecureRandom.hex(64)
+  rescue Redis::CommandError => e
+    @safe_secret_key_base = SecureRandom.hex(64) if e.message =~ /READONLY/
   end
 
   def self.load_defaults
@@ -209,11 +209,9 @@ class GlobalSetting
         c[:port] = redis_port if redis_port
 
         if get_redis_replica_host && get_redis_replica_port && defined?(RailsFailover)
-          c[:client_implementation] = RailsFailover::Redis::Client
-          c[:custom] = {
-            replica_host: get_redis_replica_host,
-            replica_port: get_redis_replica_port,
-          }
+          c[:replica_host] = get_redis_replica_host
+          c[:replica_port] = get_redis_replica_port
+          c[:connector] = RailsFailover::Redis::Connector
         end
 
         c[:username] = redis_username if redis_username.present?
@@ -236,11 +234,9 @@ class GlobalSetting
         c[:port] = message_bus_redis_port if message_bus_redis_port
 
         if get_message_bus_redis_replica_host && get_message_bus_redis_replica_port
-          c[:client_implementation] = RailsFailover::Redis::Client
-          c[:custom] = {
-            replica_host: get_message_bus_redis_replica_host,
-            replica_port: get_message_bus_redis_replica_port,
-          }
+          c[:replica_host] = get_message_bus_redis_replica_host
+          c[:replica_port] = get_message_bus_redis_replica_port
+          c[:connector] = RailsFailover::Redis::Connector
         end
 
         c[:username] = message_bus_redis_username if message_bus_redis_username.present?

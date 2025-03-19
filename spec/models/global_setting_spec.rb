@@ -87,29 +87,21 @@ RSpec.describe GlobalSetting do
 
   describe ".redis_config" do
     describe "when replica config is not present" do
-      it "does not set any custom client nor replica config" do
-        expect(GlobalSetting.redis_config[:client_implementation]).to be_nil
-        expect(GlobalSetting.redis_config[:custom]).to be_nil
+      it "should not set any connector" do
+        expect(GlobalSetting.redis_config[:connector]).to eq(nil)
       end
     end
 
     describe "when replica config is present" do
-      before do
-        GlobalSetting.reset_redis_config!
-        GlobalSetting.expects(:redis_replica_port).returns(6379).at_least_once
-        GlobalSetting.expects(:redis_replica_host).returns("0.0.0.0").at_least_once
-      end
+      before { GlobalSetting.reset_redis_config! }
 
       after { GlobalSetting.reset_redis_config! }
 
-      it "sets the right config" do
-        expect(GlobalSetting.redis_config).to include(
-          client_implementation: RailsFailover::Redis::Client,
-          custom: {
-            replica_host: "0.0.0.0",
-            replica_port: 6379,
-          },
-        )
+      it "should set the right connector" do
+        GlobalSetting.expects(:redis_replica_port).returns(6379).at_least_once
+        GlobalSetting.expects(:redis_replica_host).returns("0.0.0.0").at_least_once
+
+        expect(GlobalSetting.redis_config[:connector]).to eq(RailsFailover::Redis::Connector)
       end
     end
   end

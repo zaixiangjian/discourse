@@ -50,7 +50,7 @@ class RateLimiter
     @type = type
     @key = build_key(type)
     @max = max
-    @secs = secs.to_i
+    @secs = secs
     @global = global
     @aggressive = aggressive
     @error_code = error_code
@@ -60,7 +60,7 @@ class RateLimiter
     # override the default values if staff user, and staff specific max is passed
     if @user&.staff? && !@apply_limit_to_staff && @staff_limit[:max].present?
       @max = @staff_limit[:max]
-      @secs = @staff_limit[:secs].to_i
+      @secs = @staff_limit[:secs]
     end
   end
 
@@ -131,15 +131,23 @@ class RateLimiter
     else
       true
     end
-  rescue Redis::ReadOnlyError
-    # TODO,switch to in-memory rate limiter
+  rescue Redis::CommandError => e
+    if e.message =~ /READONLY/
+      # TODO,switch to in-memory rate limiter
+    else
+      raise
+    end
   end
 
   def rollback!
     return if RateLimiter.disabled?
     redis.lpop(prefixed_key)
-  rescue Redis::ReadOnlyError
-    # TODO,switch to in-memory rate limiter
+  rescue Redis::CommandError => e
+    if e.message =~ /READONLY/
+      # TODO,switch to in-memory rate limiter
+    else
+      raise
+    end
   end
 
   def remaining
@@ -154,6 +162,7 @@ class RateLimiter
   private
 
   def rate_limiter_allowed?(now)
+    lua, lua_sha = nil
     eval_helper = @aggressive ? PERFORM_LUA_AGGRESSIVE : PERFORM_LUA
 
     eval_helper.eval(redis, [prefixed_key], [now, @secs, @max]) == 0
