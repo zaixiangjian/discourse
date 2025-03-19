@@ -56,7 +56,7 @@ gem "http_accept_language", require: false
 gem "discourse-fonts", require: "discourse_fonts"
 gem "discourse-emojis", require: "discourse_emojis"
 
-gem "message_bus"
+gem "message_bus", "< 4.4.0"
 
 gem "rails_multisite"
 
