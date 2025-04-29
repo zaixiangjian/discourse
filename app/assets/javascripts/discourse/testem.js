@@ -131,44 +131,46 @@ class Reporter extends TapReporter {
   }
 }
 
-module.exports = {
-  test_page: "tests/index.html?hidepassed",
-  disable_watching: true,
-  launch_in_ci: [process.env.TESTEM_DEFAULT_BROWSER || "Chrome"],
-  tap_failed_tests_only: false,
-  parallel: -1,
-  browser_start_timeout: 120,
-  browser_args: {
-    Chromium: [
-      // --no-sandbox is needed when running Chromium inside a container
-      process.env.CI ? "--no-sandbox" : null,
-      "--headless=new",
-      "--disable-dev-shm-usage",
-      "--disable-software-rasterizer",
-      "--disable-search-engine-choice-screen",
-      "--mute-audio",
-      "--remote-debugging-port=4201",
-      "--window-size=1440,900",
-      "--enable-precise-memory-info",
-      "--js-flags=--max_old_space_size=4096",
-    ].filter(Boolean),
-    Chrome: [
-      // --no-sandbox is needed when running Chrome inside a container
-      process.env.CI ? "--no-sandbox" : null,
-      "--headless=new",
-      "--disable-dev-shm-usage",
-      "--disable-software-rasterizer",
-      "--disable-search-engine-choice-screen",
-      "--mute-audio",
-      "--remote-debugging-port=4201",
-      "--window-size=1440,900",
-      "--enable-precise-memory-info",
-      "--js-flags=--max_old_space_size=4096",
-    ].filter(Boolean),
-    Firefox: ["-headless", "--width=1440", "--height=900"],
-  },
-  reporter: Reporter,
-};
+if (typeof module !== "undefined") {
+  module.exports = {
+    test_page: "tests/index.html?hidepassed",
+    disable_watching: true,
+    launch_in_ci: [process.env.TESTEM_DEFAULT_BROWSER || "Chrome"],
+    tap_failed_tests_only: false,
+    parallel: -1,
+    browser_start_timeout: 120,
+    browser_args: {
+      Chromium: [
+        // --no-sandbox is needed when running Chromium inside a container
+        process.env.CI ? "--no-sandbox" : null,
+        "--headless=new",
+        "--disable-dev-shm-usage",
+        "--disable-software-rasterizer",
+        "--disable-search-engine-choice-screen",
+        "--mute-audio",
+        "--remote-debugging-port=4201",
+        "--window-size=1440,900",
+        "--enable-precise-memory-info",
+        "--js-flags=--max_old_space_size=4096",
+      ].filter(Boolean),
+      Chrome: [
+        // --no-sandbox is needed when running Chrome inside a container
+        process.env.CI ? "--no-sandbox" : null,
+        "--headless=new",
+        "--disable-dev-shm-usage",
+        "--disable-software-rasterizer",
+        "--disable-search-engine-choice-screen",
+        "--mute-audio",
+        "--remote-debugging-port=4201",
+        "--window-size=1440,900",
+        "--enable-precise-memory-info",
+        "--js-flags=--max_old_space_size=4096",
+      ].filter(Boolean),
+      Firefox: ["-headless", "--width=1440", "--height=900"],
+    },
+    reporter: Reporter,
+  };
+}
 
 if (process.env.TESTEM_FIREFOX_PATH) {
   module.exports.browser_paths ||= {};

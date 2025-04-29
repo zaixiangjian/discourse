@@ -52,7 +52,7 @@ let { define: __define__, require: __require__ } = globalThis;
 // Note that `importSync` is a macro which must be passed a string
 // literal, therefore cannot be abstracted away.
 export default function loaderShim(pkg, callback) {
-  if (!__require__.has(pkg)) {
-    __define__(pkg, callback);
-  }
+  // if (!__require__.has(pkg)) {
+  //   __define__(pkg, callback);
+  // }
 }

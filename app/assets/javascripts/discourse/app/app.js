@@ -10,11 +10,15 @@ registerDiscourseImplicitInjections();
 
 import Application from "@ember/application";
 import { VERSION } from "@ember/version";
-import require from "require";
+// import require from "require";
 import { normalizeEmberEventHandling } from "discourse/lib/ember-events";
 import { isTesting } from "discourse/lib/environment";
 import { withPluginApi } from "discourse/lib/plugin-api";
+import compatModules from "@embroider/virtual/compat-modules";
 import { buildResolver } from "discourse/resolver";
+import Resolver from "ember-resolver";
+import _loadInitializers from "ember-load-initializers";
+import config from "discourse/config/environment";
 
 const _pluginCallbacks = [];
 let _unhandledThemeErrors = [];
@@ -27,7 +31,7 @@ class Discourse extends Application {
     paste: "paste",
   };
 
-  Resolver = buildResolver("discourse");
+  Resolver = Resolver.withModules(compatModules);
 
   // Start up the Discourse application by running all the initializers we've defined.
   start() {
@@ -48,7 +52,7 @@ class Discourse extends Application {
     // Disable browser handling:
     window.history.scrollRestoration = "manual";
 
-    loadInitializers(this);
+    // loadInitializers(this, compatModules);
   }
 
   _registerPluginCode(version, code) {
@@ -246,3 +250,6 @@ export default Discourse;
 /**
  * @typedef {import('ember-source/types')} EmberTypes
  */
+
+// debugger;
+_loadInitializers(Discourse, "discourse", compatModules);

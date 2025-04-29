@@ -24,22 +24,22 @@ export default {
       return;
     }
 
-    let setupData;
+    let setupData = {};
     const setupDataElement = document.getElementById("data-discourse-setup");
     if (setupDataElement) {
       setupData = setupDataElement.dataset;
     }
 
-    let preloaded;
+    let preloaded = {};
     const preloadedDataElement = document.getElementById("data-preloaded");
     if (preloadedDataElement) {
       preloaded = JSON.parse(preloadedDataElement.dataset.preloaded);
     }
 
     const keys = Object.keys(preloaded);
-    if (keys.length === 0) {
-      throw "No preload data found in #data-preloaded. Unable to boot Discourse.";
-    }
+    // if (keys.length === 0) {
+    //   throw "No preload data found in #data-preloaded. Unable to boot Discourse.";
+    // }
 
     keys.forEach(function (key) {
       PreloadStore.store(key, JSON.parse(preloaded[key]));

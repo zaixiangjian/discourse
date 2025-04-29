@@ -12,13 +12,21 @@
     <meta charset="utf-8">
     <title>Discourse - Ember CLI</title>
 
-    <link integrity="" rel="stylesheet" href="{{rootURL}}assets/vendor.css" />
-    <link integrity="" rel="stylesheet" href="{{rootURL}}assets/discourse.css" />
+    <link integrity="" rel="stylesheet" href="/@embroider/virtual/vendor.css" />
+    <link integrity="" rel="stylesheet" href="/@embroider/virtual/app.css" />
 
-    <script defer src="{{rootURL}}assets/vendor.js"></script>
+    <script defer src="/@embroider/virtual/vendor.js"></script>
 
-    <script defer src="{{rootURL}}assets/discourse.js"></script>
+    <script type="module">
+      import Application from './app/app';
+      import environment from './app/config/environment';
+
+      Application.create(environment.APP);
+    </script>
   </head>
   <body>
+    <div id="main"></div>
+
+    <div class="hidden" id="data-preloaded" data-preloaded="{}"></div>
   </body>
 </html>
