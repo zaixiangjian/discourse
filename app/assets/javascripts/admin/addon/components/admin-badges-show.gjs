@@ -266,6 +266,7 @@ export default class AdminBadgesShow extends Component {
             <LinkTo
               @route="adminSiteText"
               @query={{hash q=(concat this.textCustomizationPrefix "name")}}
+              class="btn-flat"
             >
               {{icon "pencil"}}
             </LinkTo>
@@ -364,6 +365,7 @@ export default class AdminBadgesShow extends Component {
                 @query={{hash
                   q=(concat this.textCustomizationPrefix "description")
                 }}
+                class="btn-flat"
               >
                 {{icon "pencil"}}
               </LinkTo>
@@ -393,6 +395,7 @@ export default class AdminBadgesShow extends Component {
                 @query={{hash
                   q=(concat this.textCustomizationPrefix "long_description")
                 }}
+                class="btn-flat"
               >
                 {{icon "pencil"}}
               </LinkTo>
