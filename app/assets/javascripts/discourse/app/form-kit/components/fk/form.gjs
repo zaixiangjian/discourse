@@ -102,7 +102,6 @@ class FKForm extends Component {
   }
 
   get dirtyCount() {
-    console.log(this.formData, this.formData.patches);
     const paths = new Set();
     this.formData.patches.forEach((patch) => {
       paths.add(patch.path[0]);
