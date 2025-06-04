@@ -14,6 +14,11 @@ import { parseAsync } from "discourse/lib/text";
 import { setTextDirections } from "discourse/lib/text-direction";
 import { tokenRange } from "discourse/lib/utilities";
 import { i18n } from "discourse-i18n";
+import HighlightedCode from "admin/components/highlighted-code";
+
+const HighlightedCodeWrapper = <template>
+  <HighlightedCode @code={{@data.code}} />
+</template>;
 
 export default {
   initialize(owner) {
@@ -24,8 +29,53 @@ export default {
       const capabilities = owner.lookup("service:capabilities");
       const modal = owner.lookup("service:modal");
       // will eventually just be called lightbox
-      api.decorateCookedElement((elem) => {
-        return highlightSyntax(elem, siteSettings, session);
+      api.decorateCookedElement((elem, helper) => {
+        if (!elem) {
+          return;
+        }
+
+        const selector = siteSettings.autohighlight_all_code
+          ? "pre[data-code-wrap]"
+          : "pre[data-code-wrap]";
+
+        const codeblocks = elem.querySelectorAll(selector);
+
+        if (!codeblocks.length) {
+          return;
+        }
+
+        codeblocks.forEach((e) => {
+          // Large code blocks can cause crashes or slowdowns
+          if (e.innerHTML.length > 30000) {
+            return;
+          }
+
+          let lang;
+          for (const className of e.classList) {
+            const m = className.match(/^lang(?:uage)?-(.+)$/);
+            if (m) {
+              lang = m[1];
+              break;
+            }
+          }
+
+          if (lang === "auto" && e.innerHTML.length > 1000) {
+            return;
+          }
+
+          const code = e.textContent;
+          e.innerHTML = "";
+
+          const div = document.createElement("div");
+
+          e.insertAdjacentElement("afterend", div);
+
+          helper.renderGlimmer(div, HighlightedCodeWrapper, {
+            code,
+          });
+
+          e.remove();
+        });
       });
 
       api.decorateCookedElement((elem) => {
