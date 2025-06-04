@@ -102,7 +102,6 @@ export default {
               const destinationUrl =
                 cookie("destination_url") || options.destination_url;
               if (destinationUrl) {
-                // redirect client to the original URL
                 removeCookie("destination_url");
                 window.location.href = destinationUrl;
               } else if (

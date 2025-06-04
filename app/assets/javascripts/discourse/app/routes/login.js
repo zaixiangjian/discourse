@@ -1,5 +1,6 @@
 import { next } from "@ember/runloop";
 import { service } from "@ember/service";
+import cookie from "discourse/lib/cookie";
 import DiscourseURL from "discourse/lib/url";
 import { defaultHomepage } from "discourse/lib/utilities";
 import StaticPage from "discourse/models/static-page";
@@ -10,9 +11,9 @@ export default class LoginRoute extends DiscourseRoute {
   @service router;
   @service login;
 
-  beforeModel(transition) {
-    if (transition.from) {
-      this.internalReferrer = this.router.urlFor(transition.from.name);
+  beforeModel({ from }) {
+    if (from) {
+      this.internalReferrer = this.router.urlFor(from.name);
     }
 
     if (this.siteSettings.login_required) {
@@ -52,10 +53,7 @@ export default class LoginRoute extends DiscourseRoute {
       this.internalReferrer ||
       DiscourseURL.isInternalTopic(document.referrer)
     ) {
-      controller.set(
-        "referrerTopicUrl",
-        this.internalReferrer || document.referrer
-      );
+      cookie("destination_url", this.internalReferrer || document.referrer);
     }
 
     if (this.login.isOnlyOneExternalLoginMethod) {
