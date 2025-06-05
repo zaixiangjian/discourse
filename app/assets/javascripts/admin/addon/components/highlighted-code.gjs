@@ -80,6 +80,9 @@ export default class HighlightedCode extends Component {
       model: {
         lang: this.args.lang,
         code: this.args.code,
+        path: this.args.path,
+        highlightedLines: this.args.highlightedLines,
+        numbers: this.args.numbers,
       },
     });
   }
@@ -161,6 +164,13 @@ export default class HighlightedCode extends Component {
               class="btn-small btn-transparent highlighted-code__expand-btn"
               @label="copy_codeblock.fullscreen"
               @action={{this.expand}}
+            />
+          {{/if}}
+          {{#if @close}}
+            <DButton
+              @icon="xmark"
+              class="btn-small btn-transparent highlighted-code__close-btn"
+              @action={{@close}}
             />
           {{/if}}
         </div>
