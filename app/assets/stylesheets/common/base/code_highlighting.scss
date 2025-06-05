@@ -215,17 +215,19 @@ h6 code {
     display: block;
     text-align: right;
     width: 55px;
-    color: var(--secondary);
-    background: var(--secondary-high);
+    color: var(--primary-300);
     padding-inline: 4px;
     box-sizing: border-box;
   }
 }
 
 .highlighted-code__background-layer {
+  padding: 0.5rem;
+
   .highlighted-code__line-placeholder {
     &.-highlighted {
       background: var(--tertiary-very-low);
+      margin-left: -0.5rem;
     }
   }
 }
@@ -235,7 +237,7 @@ h6 code {
   top: 0;
   width: 100%;
   box-sizing: border-box;
-  padding-left: 0.5rem;
+  padding: 0.5rem;
   margin: 0;
 
   code {
@@ -252,7 +254,7 @@ h6 code {
   width: 100%;
 
   &.-highlighted {
-    border-left: 4px solid var(--tertiary);
+    border-left: 4px solid var(--tertiary-medium);
     box-sizing: border-box;
   }
 }
@@ -304,11 +306,7 @@ h6 code {
 
 .post-stream {
   .highlighted-code {
-    box-shadow:
-      0 0 0 1px var(--primary-300),
-      0 0 0 4px var(--primary-100);
-
-    // Makes the outer drop shadow radius equal to --d-border-radius
-    border-radius: calc(var(--d-border-radius) - (4px / 2));
+    border: 1px solid var(--primary-300);
+    border-radius: var(--d-border-radius);
   }
 }
