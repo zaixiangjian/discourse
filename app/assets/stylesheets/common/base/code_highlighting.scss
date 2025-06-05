@@ -211,10 +211,12 @@ h6 code {
 }
 
 .highlighted-code__numbers-layer {
+  padding: 0.5rem 0;
+
   .number {
     display: block;
     text-align: right;
-    width: 55px;
+    width: 50px;
     color: var(--primary-300);
     padding-inline: 4px;
     box-sizing: border-box;
@@ -226,7 +228,7 @@ h6 code {
 
   .highlighted-code__line-placeholder {
     &.-highlighted {
-      background: var(--tertiary-very-low);
+      background: var(--d-selected);
       margin-left: -0.5rem;
     }
   }
@@ -254,7 +256,6 @@ h6 code {
   width: 100%;
 
   &.-highlighted {
-    border-left: 4px solid var(--tertiary-medium);
     box-sizing: border-box;
   }
 }
@@ -269,17 +270,16 @@ h6 code {
   display: flex;
   flex-direction: row;
   align-items: center;
-  background: var(--primary-50);
-  border-top-left-radius: var(--d-border-radius);
-  border-top-right-radius: var(--d-border-radius);
-  border-bottom: var(--primary-300) 1px solid;
+  background: var(--primary-200);
+  border-bottom: 1px solid var(--primary-300);
   padding-inline: 12px;
   justify-content: space-between;
   padding-block: 0.25rem;
 
   .highlighted-code__path {
-    font-size: var(--font-down-1);
-    color: var(--primary-medium);
+    font-size: var(--font-down-2);
+    font-family: var(--d-font-family--monospace);
+    color: var(--primary-700);
 
     @include ellipsis;
   }
@@ -306,7 +306,8 @@ h6 code {
 
 .post-stream {
   .highlighted-code {
-    border: 1px solid var(--primary-300);
+    overflow: hidden;
+    background-color: var(--hljs-bg);
     border-radius: var(--d-border-radius);
   }
 }
