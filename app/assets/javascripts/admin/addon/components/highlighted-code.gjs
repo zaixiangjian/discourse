@@ -1,19 +1,15 @@
 import Component from "@glimmer/component";
+import { concat } from "@ember/helper";
 import { action } from "@ember/object";
 import { service } from "@ember/service";
+import { TrackedObject } from "@ember-compat/tracked-built-ins";
 import { modifier } from "ember-modifier";
+import DButton from "discourse/components/d-button";
+import FullscreenCodeModal from "discourse/components/modal/fullscreen-code";
 import concatClass from "discourse/helpers/concat-class";
 import highlightSyntax from "discourse/lib/highlight-syntax";
-
-class FadeOutLayer extends Component {
-  <template>
-    <AuxiliaryLayer
-      @lineNumbers={{@lineNumbers}}
-      @highlightedLines={{@highlightedLines}}
-      ...attributes
-    >&nbsp;</AuxiliaryLayer>
-  </template>
-}
+import discourseLater from "discourse/lib/later";
+import { clipboardCopy } from "discourse/lib/utilities";
 
 class NumbersLayer extends Component {
   <template>
@@ -54,9 +50,20 @@ class AuxiliaryLayer extends Component {
   </template>
 }
 
+const DEFAULT_COPY_ICON = "copy";
+const ACTIVE_COPY_ICON = "check";
+const DEFAULT_COPY_LABEL = "copy";
+const ACTIVE_COPY_LABEL = "copied";
+
 export default class HighlightedCode extends Component {
   @service session;
   @service siteSettings;
+  @service modal;
+
+  copyBtnState = new TrackedObject({
+    label: DEFAULT_COPY_LABEL,
+    icon: DEFAULT_COPY_ICON,
+  });
 
   highlight = modifier(async (element) => {
     const code = document.createElement("code");
@@ -67,12 +74,39 @@ export default class HighlightedCode extends Component {
     await highlightSyntax(element, this.siteSettings, this.session);
   });
 
+  @action
+  expand() {
+    this.modal.show(FullscreenCodeModal, {
+      model: {
+        lang: this.args.lang,
+        code: this.args.code,
+      },
+    });
+  }
+
+  @action
+  copy() {
+    this.copyBtnState.label = ACTIVE_COPY_LABEL;
+    this.copyBtnState.icon = ACTIVE_COPY_ICON;
+
+    clipboardCopy(this.args.code);
+
+    discourseLater(() => {
+      this.copyBtnState.label = DEFAULT_COPY_LABEL;
+      this.copyBtnState.icon = DEFAULT_COPY_ICON;
+    }, 3000);
+  }
+
   get lineNumbers() {
     return this.args.code.split("\n").map((_, index) => index + 1);
   }
 
   get highlightedLines() {
-    return this.parseLineRanges("1, 3-4");
+    return this.parseLineRanges(this.args.highlightedLines);
+  }
+
+  get highlightLines() {
+    return this.highlightedLines && this.args.highlightedLines?.length;
   }
 
   @action
@@ -103,21 +137,55 @@ export default class HighlightedCode extends Component {
   }
 
   <template>
-    <div class="highlighted-code --with-line-highlighting --with-line-numbers">
-      <BackgroundLayer
-        @lineNumbers={{this.lineNumbers}}
-        @highlightedLines={{this.highlightedLines}}
-        class="highlighted-code__background-layer"
-      />
+    <div class="highlighted-code">
+      <div class="highlighted-code__header">
+        {{#if @path}}
+          <span class="highlighted-code__path">{{@path}}</span>
+        {{else}}
+          <span class="highlighted-code__path">{{@lang}}</span>
+        {{/if}}
 
-      <pre {{this.highlight}} class="highlighted-code__code"></pre>
+        <div class="highlighted-code__header-actions">
+          {{#if @showCopy}}
+            <DButton
+              @icon={{this.copyBtnState.icon}}
+              class="btn-small btn-transparent highlighted-code__copy-btn"
+              @label={{concat "copy_codeblock." this.copyBtnState.label}}
+              @action={{this.copy}}
+            />
+          {{/if}}
 
-      {{#if this.highlightedLines}}
-        <NumbersLayer
-          @lineNumbers={{this.lineNumbers}}
-          class="highlighted-code__numbers-layer"
-        />
-      {{/if}}
+          {{#if @showFullscreen}}
+            <DButton
+              @icon="discourse-expand"
+              class="btn-small btn-transparent highlighted-code__expand-btn"
+              @label="copy_codeblock.fullscreen"
+              @action={{this.expand}}
+            />
+          {{/if}}
+        </div>
+      </div>
+
+      <div class="highlighted-code__body">
+        {{#if this.highlightLines}}
+          <div class="highlighted-code__gutter">
+            <NumbersLayer
+              @lineNumbers={{this.lineNumbers}}
+              class="highlighted-code__numbers-layer"
+            />
+          </div>
+        {{/if}}
+
+        <div class="highlighted-code__editor">
+          <BackgroundLayer
+            @lineNumbers={{this.lineNumbers}}
+            @highlightedLines={{this.highlightedLines}}
+            class="highlighted-code__background-layer"
+          />
+
+          <pre {{this.highlight}} class="highlighted-code__code"></pre>
+        </div>
+      </div>
     </div>
   </template>
 }

@@ -17,14 +17,21 @@ import { i18n } from "discourse-i18n";
 import HighlightedCode from "admin/components/highlighted-code";
 
 const HighlightedCodeWrapper = <template>
-  <HighlightedCode @code={{@data.code}} />
+  <HighlightedCode
+    @code={{@data.code}}
+    @highlightedLines={{@data.lines}}
+    @numbers={{@data.numbers}}
+    @path={{@data.path}}
+    @lang={{@data.lang}}
+    @showCopy={{true}}
+    @showFullscreen={{true}}
+  />
 </template>;
 
 export default {
   initialize(owner) {
     withPluginApi("0.1", (api) => {
       const siteSettings = owner.lookup("service:site-settings");
-      const session = owner.lookup("service:session");
       const site = owner.lookup("service:site");
       const capabilities = owner.lookup("service:capabilities");
       const modal = owner.lookup("service:modal");
@@ -64,14 +71,20 @@ export default {
           }
 
           const code = e.textContent;
+
           e.innerHTML = "";
 
           const div = document.createElement("div");
+          div.classList.add("highlighted-code__wrapper");
 
           e.insertAdjacentElement("afterend", div);
 
           helper.renderGlimmer(div, HighlightedCodeWrapper, {
             code,
+            lines: e.dataset.codeLines,
+            numbers: e.dataset.codeNumbers,
+            path: e.dataset.codePath,
+            lang: e.dataset.codeWrap,
           });
 
           e.remove();
