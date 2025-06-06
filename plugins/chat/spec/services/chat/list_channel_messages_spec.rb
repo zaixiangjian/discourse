@@ -99,18 +99,8 @@ RSpec.describe Chat::ListChannelMessages do
         expect(result.channel).to eq(channel)
       end
 
-      context "when user has membership" do
-        it "finds the correct membership" do
-          expect(result.membership).to eq(channel.membership_for(user))
-        end
-      end
-
-      context "when user has no membership" do
-        before { channel.membership_for(user).destroy! }
-
-        it "finds no membership" do
-          expect(result.membership).to be_blank
-        end
+      it "finds the correct membership" do
+        expect(result.membership).to eq(channel.membership_for(user))
       end
 
       context "when fetch_from_last_read is true" do
@@ -123,19 +113,6 @@ RSpec.describe Chat::ListChannelMessages do
 
         it "sets target_message_id to last_read_message_id" do
           expect(result.target_message_id).to eq(1)
-        end
-      end
-
-      context "when target message is trashed" do
-        fab!(:target_message) { Fabricate(:chat_message, chat_channel: channel) }
-        let(:optional_params) { { target_message_id: target_message.id } }
-
-        before { target_message.trash! }
-
-        context "when user is regular" do
-          it "nullifies target_message_id" do
-            expect(result.target_message_id).to be_blank
-          end
         end
       end
 

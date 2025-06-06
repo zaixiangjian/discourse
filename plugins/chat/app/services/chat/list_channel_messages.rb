@@ -49,7 +49,7 @@ module Chat
     policy :can_view_channel
     model :membership, optional: true
     model :target_message_id, optional: true
-    policy :target_message_exists
+    policy :target_message_exists, class_name: Chat::Channel::Policy::MessageExistence
     model :messages, optional: true
     model :thread_ids, optional: true
     model :tracking, optional: true
@@ -73,27 +73,8 @@ module Chat
     end
 
     def fetch_target_message_id(params:, membership:)
-      if params.fetch_from_last_read
-        membership&.last_read_message_id
-      else
-        params.target_message_id
-      end
-    end
-
-    def target_message_exists(channel:, guardian:, target_message_id:)
-      return true if target_message_id.blank?
-
-      target_message =
-        Chat::Message.with_deleted.find_by(id: target_message_id, chat_channel: channel)
-      return false if target_message.blank?
-
-      return true if !target_message.trashed?
-      if target_message.trashed? && target_message.user_id == guardian.user.id || guardian.is_staff?
-        return true
-      end
-
-      context[:target_message_id] = nil
-      true
+      return params.target_message_id unless params.fetch_from_last_read
+      membership&.last_read_message_id
     end
 
     def fetch_messages(channel:, params:, guardian:, target_message_id:)
