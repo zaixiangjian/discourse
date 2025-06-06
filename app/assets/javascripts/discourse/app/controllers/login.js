@@ -153,7 +153,7 @@ export default class LoginPageController extends Controller {
 
           if (destinationUrl) {
             removeCookie("destination_url");
-            window.location.assign(destinationUrl);
+            window.location = destinationUrl;
           } else {
             window.location.reload();
           }
@@ -334,7 +334,7 @@ export default class LoginPageController extends Controller {
             navigator.userAgent.match(/Safari/g)
           ) {
             // In case of Safari on iOS do not submit hidden login form
-            window.location.href = hiddenLoginForm.querySelector(
+            window.location = hiddenLoginForm.querySelector(
               "input[name=redirect]"
             ).value;
           } else {
