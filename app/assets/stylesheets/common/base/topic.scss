@@ -1,5 +1,15 @@
 @use "lib/viewport";
 
+body.text-selection-inactive,
+body.text-selection-inactive * {
+  @include user-select(none);
+}
+
+.post-text-selection-active,
+.post-text-selection-active * {
+  @include user-select(text !important);
+}
+
 #main-outlet {
   --below-topic-margin: 0.75em;
 }

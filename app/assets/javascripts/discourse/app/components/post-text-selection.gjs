@@ -5,6 +5,7 @@ import { cancel, debounce } from "@ember/runloop";
 import { service } from "@ember/service";
 import { modifier } from "ember-modifier";
 import PostTextSelectionToolbar from "discourse/components/post-text-selection-toolbar";
+import bodyClass from "discourse/helpers/body-class";
 import discourseDebounce from "discourse/lib/debounce";
 import { bind } from "discourse/lib/decorators";
 import { INPUT_DELAY } from "discourse/lib/environment";
@@ -49,6 +50,7 @@ export default class PostTextSelection extends Component {
   @service siteSettings;
   @service menu;
 
+  @tracked textSelectionInactive = false;
   @tracked isSelecting = false;
   @tracked preventClose = applyValueTransformer(
     "post-text-selection-prevent-close",
@@ -64,13 +66,18 @@ export default class PostTextSelection extends Component {
   });
 
   documentListeners = modifier(() => {
-    document.addEventListener("mousedown", this.mousedown, { passive: true });
-    document.addEventListener("mouseup", this.mouseup, { passive: true });
+    const { isAndroid } = this.capabilities;
+    const endEvent = isAndroid ? "pointercancel" : "mouseup";
+
+    document.addEventListener("pointerdown", this.pointerdown, {
+      passive: true,
+    });
+    document.addEventListener(endEvent, this.mouseup, { passive: true });
     document.addEventListener("selectionchange", this.onSelectionChanged);
 
     return () => {
-      document.removeEventListener("mousedown", this.mousedown);
-      document.removeEventListener("mouseup", this.mouseup);
+      document.removeEventListener("pointerdown", this.pointerdown);
+      document.removeEventListener(endEvent, this.mouseup);
       document.removeEventListener("selectionchange", this.onSelectionChanged);
     };
   });
@@ -258,6 +265,21 @@ export default class PostTextSelection extends Component {
 
   @bind
   onSelectionChanged() {
+    const selection = window.getSelection();
+    if (selection.rangeCount) {
+      // ensure we lock on the post where the selection started
+      const range = selection.getRangeAt(0);
+      const selectionStart = getElement(range.startContainer);
+
+      const cooked = selectionStart.closest(".cooked");
+      if (cooked) {
+        cooked.classList.add("post-text-selection-active");
+        this.textSelectionInactive = true;
+      }
+    }
+
+    this.hideToolbar();
+
     if (this.isSelecting) {
       return;
     }
@@ -272,12 +294,16 @@ export default class PostTextSelection extends Component {
   }
 
   @bind
-  mousedown() {
+  pointerdown() {
+    this._cleanUserSelectState();
+
     this.isSelecting = true;
   }
 
   @bind
   mouseup() {
+    this._cleanUserSelectState();
+
     this.isSelecting = false;
     this.onSelectionChanged();
   }
@@ -328,7 +354,19 @@ export default class PostTextSelection extends Component {
     return await this.args.buildQuoteMarkdown();
   }
 
+  _cleanUserSelectState() {
+    document
+      .querySelector(".post-text-selection-active")
+      ?.classList.remove("post-text-selection-active");
+
+    this.textSelectionInactive = false;
+  }
+
   <template>
+    {{#if this.textSelectionInactive}}
+      {{bodyClass "text-selection-inactive"}}
+    {{/if}}
+
     <div
       {{this.documentListeners}}
       {{this.appEventsListeners}}
