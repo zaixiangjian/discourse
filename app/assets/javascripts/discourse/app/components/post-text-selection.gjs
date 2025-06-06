@@ -278,6 +278,8 @@ export default class PostTextSelection extends Component {
       }
     }
 
+    this.hideToolbar();
+
     if (this.isSelecting) {
       return;
     }
